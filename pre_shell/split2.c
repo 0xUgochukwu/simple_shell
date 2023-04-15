@@ -6,16 +6,16 @@ int split_string(char *str, char *delimiter, char ***words) {
     char *token;
     int count = 0;
 
-    // Get the first token
+    // Get the first token //
     token = strtok(str, delimiter);
 
     // Loop through the string to extract all tokens
     while (token != NULL) {
-        // Add the token to the array of words
+        // Add the token to the array of words //
         (*words)[count] = token;
         count++;
 
-        // Get the next token
+        // Get the next token //
         token = strtok(NULL, delimiter);
     }
 
