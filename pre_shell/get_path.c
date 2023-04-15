@@ -10,7 +10,7 @@ int main(int argc, char *argv[]) {
 
     while (token != NULL) {
         char filename[100];
-        sprintf(filename, "%s/%s", token, argv[1]);
+        sprintf(filename, "%s/%s", token, argv[1]); /* argv[0] in pur program */
 
         struct stat st;
         if (stat(filename, &st) == 0 && st.st_mode & S_IXUSR) {
