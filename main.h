@@ -8,6 +8,13 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+typedef struct {
+  char *cmd;
+  char *seprator;
+  char **argv;
+  char **environ;
+} command_t;
+
 void execute_file(char *filename);
 void start_shell(void);
 #endif
