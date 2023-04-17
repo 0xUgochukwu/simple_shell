@@ -9,13 +9,13 @@
 
 int main (int ac,char **av) 
 {
-	if (ac > 2)
-		return (0);
+  if (ac > 2)
+    return (0);
 
-	if (ac == 2)
-		execute_file(av[1]);
-	else
-		start_shell();
+  if (ac == 2)
+    execute_file(av[1]);
+  else
+    start_shell();
 
-	return (0);
+  return (0);
 }
