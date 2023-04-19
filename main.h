@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 
@@ -19,4 +20,6 @@ typedef struct {
 
 void execute_file(char *filename);
 void start_shell(void);
+char *prompt (void);
+void throw_error(char *err);
 #endif
