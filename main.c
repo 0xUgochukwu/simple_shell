@@ -7,7 +7,7 @@
  * argv: list of arguments
  */
 
-int main (int __attribute__((unused)) ac, char **av) 
+int main (int __attribute__((unused)) ac, char **av, char **envp) 
 {
 	char *err_msg = malloc(1024);
 	int err_len;

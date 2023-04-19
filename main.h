@@ -13,6 +13,7 @@ typedef struct {
   char *seprator;
   char **argv;
   char **environ;
+  struct command_t *next;
 } command_t;
 
 void execute_file(char *filename);
