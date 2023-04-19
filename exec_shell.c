@@ -4,7 +4,7 @@
 void start_shell(void)
 {
 	char *command;
-	size_t buffsize = BUFFSIZE;
+	char *buffer[BUFFSIZE];
 	ssize_t read_chars;
 
 	command = malloc(BUFFSIZE);
@@ -15,7 +15,7 @@ void start_shell(void)
 	}
 	write(STDOUT_FILENO, "$ ", 2);
 	fflush(stdout);
-	read_chars = getline(&command, &bufsize, STDIN_FILENO);
+	read_chars = getline(&command, &buffer, STDIN_FILENO);
 	parse_command(command);
 	free(command);
 }

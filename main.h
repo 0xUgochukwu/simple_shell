@@ -8,12 +8,13 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#define BUFFSIZE 1024
+
 typedef struct {
-  char *cmd;
-  char *seprator;
-  char **argv;
-  char **environ;
-  struct command_t *next;
+    char *cmd;
+    char *seprator;
+    char **argv;
+    char **environ;
 } command_t;
 
 void execute_file(char *filename);
