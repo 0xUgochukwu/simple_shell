@@ -46,52 +46,72 @@ char *replace_aliases(char *cmd)
 
 char *replace_vars(char *cmd)
 {
-	char *result;
-	char *p;
-	char *q;
-	char *var_start;
-	char *var_end;
-	char *var_value;
+        char *result = NULL;
+    char *p = cmd;
+    char *q = NULL;
+    char var_name[256] = {0};
+    char *var_value = NULL;
 
-	result = (char *)malloc(strlen(cmd) + 1);
-	p = cmd;
-	q = result;
+    while (*p != '\0') {
+        if (*p == '$' && *(p + 1) != '\0') {
+            int i = 0;
+            p++;
 
-	while (*p != '\0')
-	{
-		if (*p == '$' && *(p + 1) != '\0')
-		{
-			var_start = p + 1;
-			var_end = var_start;
+            while (*p != '\0' && isalnum(*p)) {
+                var_name[i] = *p;
+                i++;
+                p++;
+            }
 
-			while (*var_end != '\0' && isalnum(*var_end))
-			{
-				var_end++;
-			}
+            var_name[i] = '\0';
 
-			*var_end = '\0';
-			var_value = getenv(var_start);
+            var_value = getenv(var_name);
 
-			if (var_value != NULL)
-			{
-				q += sprintf(q, "%s", var_value);
-				p = var_end;
-			}
-			else
-			{
-				*q++ = '$';
-				q += sprintf(q, "%s", var_start);
-				p = var_end;
-			}
-		}
-		else
-		{
-			*q++ = *p++;
-		}
-	}
+            if (var_value != NULL) {
+                if (result == NULL) {
+                    result = (char *)malloc(strlen(cmd) + strlen(var_value) + 1);
+                    q = result;
+                } else {
+                    result = (char *)realloc(result, strlen(result) + strlen(var_value) + 1);
+                    q = result + strlen(result);
+                }
 
-	*q = '\0';
-	return result;
+                q += sprintf(q, "%s", var_value);
+            } else {
+                if (result == NULL) {
+                    result = (char *)malloc(strlen(cmd) + strlen(var_name) + 1);
+                    q = result;
+                } else {
+                    result = (char *)realloc(result, strlen(result) + strlen(var_name) + 1);
+                    q = result + strlen(result);
+                }
+
+                q += sprintf(q, "$%s", var_name);
+                }
+        } else {
+            if (result == NULL) {
+                result = (char *)malloc(2);
+                q = result;
+            } else {
+                result = (char *)realloc(result, strlen(result) + 2);
+                q = result + strlen(result);
+            }
+
+            *q = *p;
+            q++;
+            p++;
+        }
+    }
+
+    if (result == NULL) {
+        result = (char *)malloc(1);
+        result[0] = '\0';
+    } else {
+        q = result + strlen(result);
+        *q = '\0';
+    }
+
+    return result;
 }
 
 /**

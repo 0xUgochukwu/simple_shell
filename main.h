@@ -13,12 +13,12 @@
 
 #define BUFFSIZE 1024
 
-int num_paths;
+extern int num_paths;
 extern char **environ;
 
 typedef struct {
 	char *cmd;
-	char *seprator;
+	char *op;
 	char **argv;
 } command_t;
 
