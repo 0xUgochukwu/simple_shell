@@ -46,86 +46,86 @@ char *replace_aliases(char *cmd)
 
 char *replace_vars(char *cmd)
 {
-        char *result = NULL;
-    char *p = cmd;
-    char *q = NULL;
-    char var_name[256] = {0};
-    char *var_value = NULL;
+	char *result = NULL;
+	char *p = cmd;
+	char *q = NULL;
+	char var_name[256] = {0};
+	char *var_value = NULL;
 
-    while (*p != '\0') 
-    {
-        if (*p == '$' && *(p + 1) != '\0')
-        {
-            int i = 0;
-            p++;
+	while (*p != '\0') 
+	{
+		if (*p == '$' && *(p + 1) != '\0')
+		{
+			int i = 0;
+			p++;
 
-            while (*p != '\0' && isalnum(*p))
-            {
-                var_name[i] = *p;
-                i++;
-                p++;
-            }
+			while (*p != '\0' && isalnum(*p))
+			{
+				var_name[i] = *p;
+				i++;
+				p++;
+			}
 
-            var_name[i] = '\0';
+			var_name[i] = '\0';
 
-            var_value = getenv(var_name);
+			var_value = getenv(var_name);
 
-            if (var_value != NULL) {
-                if (result == NULL) {
-                    result = (char *)malloc(strlen(cmd) + strlen(var_value) + 1);
-                    q = result;
-                } 
-                else
-                {
-                    result = (char *)realloc(result, strlen(result) + strlen(var_value) + 1);
-                    q = result + strlen(result);
-                }
+			if (var_value != NULL) {
+				if (result == NULL) {
+					result = (char *)malloc(strlen(cmd) + strlen(var_value) + 1);
+					q = result;
+				} 
+				else
+				{
+					result = (char *)realloc(result, strlen(result) + strlen(var_value) + 1);
+					q = result + strlen(result);
+				}
 
-                q += sprintf(q, "%s", var_value);
-            }
-            else
-            {
-                if (result == NULL) {
-                    result = (char *)malloc(strlen(cmd) + strlen(var_name) + 1);
-                    q = result;
-                }
-                else 
-                {
-                    result = (char *)realloc(result, strlen(result) + strlen(var_name) + 1);
-                    q = result + strlen(result);
-                }
+				q += sprintf(q, "%s", var_value);
+			}
+			else
+			{
+				if (result == NULL) {
+					result = (char *)malloc(strlen(cmd) + strlen(var_name) + 1);
+					q = result;
+				}
+				else 
+				{
+					result = (char *)realloc(result, strlen(result) + strlen(var_name) + 1);
+					q = result + strlen(result);
+				}
 
-                q += sprintf(q, "$%s", var_name);
-            }
-        }
-        else 
-        {
-            if (result == NULL)
-            {
-                result = (char *)malloc(2);
-                q = result;
-            }
-            else 
-            {
-                result = (char *)realloc(result, strlen(result) + 2);
-                q = result + strlen(result);
-            }
+				q += sprintf(q, "$%s", var_name);
+			}
+		}
+		else 
+		{
+			if (result == NULL)
+			{
+				result = (char *)malloc(2);
+				q = result;
+			}
+			else 
+			{
+				result = (char *)realloc(result, strlen(result) + 2);
+				q = result + strlen(result);
+			}
 
-            *q = *p;
-            q++;
-            p++;
-        }
-    }
+			*q = *p;
+			q++;
+			p++;
+		}
+	}
 
-    if (result == NULL) {
-        result = (char *)malloc(1);
-        result[0] = '\0';
-    } else {
-        q = result + strlen(result);
-        *q = '\0';
-    }
+	if (result == NULL) {
+		result = (char *)malloc(1);
+		result[0] = '\0';
+	} else {
+		q = result + strlen(result);
+		*q = '\0';
+	}
 
-    return result;
+	return result;
 }
 
 /**
@@ -155,13 +155,6 @@ int execute_cmd(command_t *cmd_s)
 				break;
 		}
 
-		i = 0;
-		while (paths[i] != NULL)
-		{
-			free(paths[i]);
-			i++;
-		}
-
 		free(paths);
 		if (status == -1)
 			return (status);
@@ -176,6 +169,10 @@ int execute_cmd(command_t *cmd_s)
 		else
 			wait(&status);
 	}
+
+	i = 0;
+	while (paths[i++])
+		free(paths[i]);
 
 	return (status);
 }
