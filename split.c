@@ -10,13 +10,14 @@
 
 command_t *split(char *cmd)
 {
-    int argc = 0, len, num_commands = 1;
+    int argc = 0, num_commands = 1;
+    char *token;
     command_t *commands = malloc(sizeof(command_t));
        
     commands[0].op = NULL;
     commands[0].argv = malloc(sizeof(char*));
     
-    char *token = strtok(cmd, " ");
+    token = strtok(cmd, " ");
 
     while (token != NULL) 
     {
@@ -37,7 +38,6 @@ command_t *split(char *cmd)
         else
         {
             /* Add the current token to the current command's argv array */
-            len = strlen(token) + 1;
 
             commands[num_commands - 1].argv = realloc(commands[num_commands - 1].argv, (argc + 2) * sizeof(char*));
             commands[num_commands - 1].argv[argc++] = strdup(token);

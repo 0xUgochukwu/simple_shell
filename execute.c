@@ -1,5 +1,6 @@
 #include "main.h"
 
+
 /**
  * execute_commands - executes all comands from user
  * @cmds: array of all comands

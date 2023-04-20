@@ -13,7 +13,7 @@
 
 #define BUFFSIZE 1024
 
-extern int num_paths;
+int num_paths;
 extern char **environ;
 
 typedef struct {
