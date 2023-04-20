@@ -19,7 +19,6 @@ typedef struct {
 } command_t;
 
 void execute_file(char *filename);
-void start_shell(void);
 void prompt (void);
 void throw_error(char *err);
 #endif

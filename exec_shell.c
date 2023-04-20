@@ -2,15 +2,6 @@
 #include <string.h>
 
 
-void start_shell(void)
-{
-    char *command = "test";
-
-    if (!command)
-        throw_error("Erroer reading Input");
-
-    printf("%s\n", command);
-}
 
 void prompt (void)
 {
