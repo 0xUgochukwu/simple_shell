@@ -20,6 +20,6 @@ typedef struct {
 
 void execute_file(char *filename);
 void start_shell(void);
-char *prompt (void);
+void prompt (void);
 void throw_error(char *err);
 #endif

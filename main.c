@@ -24,7 +24,7 @@ int main (int __attribute__((unused)) ac, char **av)
 	if (ac == 2)
 		execute_file(av[1]);
 	else
-		start_shell();
+		prompt();
 
 	return (0);
 }
