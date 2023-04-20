@@ -17,7 +17,9 @@ command_t *split(char *cmd)
     commands[0].argv = malloc(sizeof(char*));
     
     char *token = strtok(cmd, " ");
-    while (token != NULL) {
+
+    while (token != NULL) 
+    {
         if (*token == ';' || *token == '&' || *token == '|') {
             /* End the current command and start a new one */
 
@@ -32,7 +34,8 @@ command_t *split(char *cmd)
 
             argc = 0;
         }
-        else {
+        else
+        {
             /* Add the current token to the current command's argv array */
             len = strlen(token) + 1;
 

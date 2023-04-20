@@ -28,7 +28,7 @@ void throw_error(char *err);
 char *replace_aliases(char *cmd);
 char *replace_vars(char *cmd);
 command_t *split(char *cmd);
-int execute_commands(command_t * cmds);
+int execute_commands(command_t *cmds);
 int builtin_check(char *cmd);
 char **get_paths(void);
 int execute_cmd(command_t *cmd_s);

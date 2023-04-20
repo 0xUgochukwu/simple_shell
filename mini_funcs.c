@@ -52,12 +52,15 @@ char *replace_vars(char *cmd)
     char var_name[256] = {0};
     char *var_value = NULL;
 
-    while (*p != '\0') {
-        if (*p == '$' && *(p + 1) != '\0') {
+    while (*p != '\0') 
+    {
+        if (*p == '$' && *(p + 1) != '\0')
+        {
             int i = 0;
             p++;
 
-            while (*p != '\0' && isalnum(*p)) {
+            while (*p != '\0' && isalnum(*p))
+            {
                 var_name[i] = *p;
                 i++;
                 p++;
@@ -71,28 +74,39 @@ char *replace_vars(char *cmd)
                 if (result == NULL) {
                     result = (char *)malloc(strlen(cmd) + strlen(var_value) + 1);
                     q = result;
-                } else {
+                } 
+                else
+                {
                     result = (char *)realloc(result, strlen(result) + strlen(var_value) + 1);
                     q = result + strlen(result);
                 }
 
                 q += sprintf(q, "%s", var_value);
-            } else {
+            }
+            else
+            {
                 if (result == NULL) {
                     result = (char *)malloc(strlen(cmd) + strlen(var_name) + 1);
                     q = result;
-                } else {
+                }
+                else 
+                {
                     result = (char *)realloc(result, strlen(result) + strlen(var_name) + 1);
                     q = result + strlen(result);
                 }
 
                 q += sprintf(q, "$%s", var_name);
-                }
-        } else {
-            if (result == NULL) {
+            }
+        }
+        else 
+        {
+            if (result == NULL)
+            {
                 result = (char *)malloc(2);
                 q = result;
-            } else {
+            }
+            else 
+            {
                 result = (char *)realloc(result, strlen(result) + 2);
                 q = result + strlen(result);
             }
