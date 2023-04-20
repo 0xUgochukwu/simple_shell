@@ -8,25 +8,26 @@
  * Return: void
  */
 
+
 int execute_commands(command_t *cmds)
 {
-    int i, status = 0, op_check;
+	int i, status = 0, op_check;
 
-    for (i = 0; cmds[i].cmd; i++)
-    {
-        if (cmds[i].op == NULL)
-            status = execute_cmd(cmds[i]);
-        else
-        {
-            op_check = operator_check(cmds[i].op, status);
-            if (op_check)
-                status = execute_cmd(cmds[i]);
-            else
-             return (status);
-        }
-    }
+	for (i = 0; cmds[i].cmd; i++)
+	{
+		if (cmds[i].op == NULL)
+			status = execute_cmd(cmds[i]);
+		else
+		{
+			op_check = operator_check(cmds[i].op, status);
+			if (op_check)
+				status = execute_cmd(cmds[i]);
+			else
+				return (status);
+		}
+	}
 
-    return (status);
+	return (status);
 }
 
 
@@ -40,22 +41,22 @@ int execute_commands(command_t *cmds)
 
 int operator_check(char *op, int status)
 {
-    if (strcmp(op, "&&") == 0)
-    {
-        if (status == 0)
-            return (1);
-        else
-            return (0);
-    }
-    else if (strcmp(op, "||") == 0)
-    {
-        if (status != 0)
-            return (1);
-        else
-            return (0);
-    }
-    else
-        return (1);
+	if (strcmp(op, "&&") == 0)
+	{
+		if (status == 0)
+			return (1);
+		else
+			return (0);
+	}
+	else if (strcmp(op, "||") == 0)
+	{
+		if (status != 0)
+			return (1);
+		else
+			return (0);
+	}
+	else
+		return (1);
 }
 
 /**

@@ -1,5 +1,4 @@
 #include "main.h"
-#include <string.h>
 
 
 
@@ -17,8 +16,11 @@ void prompt (void)
         if (read_bytes == -1)
         break;
 
-        /*parse_command(command);*/
-    } while (strcmp("exit", command) != 0);
+	command[strcspn(command, "\n")] = '\0';
+
+        parse_command(command);
+
+    } while (strcmp("exit\n", command) != 0);
 }
 
 void execute_file(char *filename)

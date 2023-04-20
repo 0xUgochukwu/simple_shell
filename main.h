@@ -24,6 +24,7 @@ typedef struct {
 
 void execute_file(char *filename);
 void prompt (void);
+void parse_command(char *cmd);
 char *replace_aliases(char *cmd);
 char *replace_vars(char *cmd);
 command_t *split(char *cmd);
