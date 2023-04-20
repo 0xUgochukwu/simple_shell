@@ -13,7 +13,7 @@
 
 #define BUFFSIZE 1024
 
-extern int num_paths;
+int num_paths;
 extern char **environ;
 
 typedef struct {
@@ -31,5 +31,5 @@ command_t *split(char *cmd);
 int execute_commands(command_t *cmds);
 int builtin_check(char *cmd);
 char **get_paths(void);
-int execute_cmd(command_t *cmd_s);
+int execute_cmd(command_t cmd_s);
 #endif

@@ -1,6 +1,6 @@
 #include "main.h"
 
-int execute_cmd(command_t *cmd_s)
+int execute_cmd(command_t cmd_s)
 {
 	char **paths = get_paths();
 	char *path;
@@ -8,13 +8,13 @@ int execute_cmd(command_t *cmd_s)
 	int i, status = -1;
 	pid_t pid;
 
-	status = builtin_check(cmd_s->cmd);
+	status = builtin_check(cmd_s.cmd);
 	if (status == -1)
 	{
 		for (i = 0; i < num_paths; i++)
 		{
 			path = strcat(paths[i], "/");
-			strcat(path, cmd_s->cmd);
+			strcat(path, cmd_s.cmd);
 			status = stat(path, &sb);
 			if (status == 0)
 				break;
@@ -28,7 +28,7 @@ int execute_cmd(command_t *cmd_s)
 			return (pid);
 		else if (pid == 0)
 		{
-			if (execve(path, cmd_s->argv, environ) == -1)
+			if (execve(path, cmd_s.argv, environ) == -1)
 				return (-1);
 		}
 		else
