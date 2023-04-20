@@ -13,7 +13,7 @@
 
 #define BUFFSIZE 1024
 
-int num_paths;
+extern int num_paths;
 extern char **environ;
 
 typedef struct {
@@ -24,7 +24,6 @@ typedef struct {
 
 void execute_file(char *filename);
 void prompt (void);
-void throw_error(char *err);
 char *replace_aliases(char *cmd);
 char *replace_vars(char *cmd);
 command_t *split(char *cmd);
@@ -32,4 +31,5 @@ int execute_commands(command_t *cmds);
 int builtin_check(char *cmd);
 char **get_paths(void);
 int execute_cmd(command_t cmd_s);
+int operator_check(char *op, int status);
 #endif

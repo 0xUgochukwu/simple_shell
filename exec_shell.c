@@ -27,8 +27,3 @@ void execute_file(char *filename)
 }
 
 
-void throw_error(char *err)
-{
-    perror(err);
-    start_shell();	
-}
