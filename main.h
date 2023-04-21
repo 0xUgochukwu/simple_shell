@@ -23,8 +23,8 @@ typedef struct {
 } command_t;
 
 void execute_file(char *filename);
-void prompt (void);
-void parse_command(char *cmd);
+void prompt(void);
+command_t *parse_command(char *cmd);
 char *replace_aliases(char *cmd);
 char *replace_vars(char *cmd);
 command_t *split(char *cmd);

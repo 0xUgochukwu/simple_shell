@@ -7,6 +7,7 @@ void prompt (void)
     char *command;
     size_t len = 0;
     ssize_t read_bytes;
+    command_t *cmds;
 
     do {
         write(STDOUT_FILENO, "$ ", 2);
@@ -18,7 +19,9 @@ void prompt (void)
 
 	command[strcspn(command, "\n")] = '\0';
 
-        parse_command(command);
+        cmds = parse_command(command);
+
+	execute_commands(cmds);
 
     } while (strcmp("exit\n", command) != 0);
 }

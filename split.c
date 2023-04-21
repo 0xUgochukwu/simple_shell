@@ -1,5 +1,6 @@
 #include "main.h"
 
+
 /**
  * split - split a command into an array of commands
  * @cmd: command to split
@@ -13,13 +14,13 @@ command_t *split(char *cmd)
     int argc = 0, num_commands = 1;
     char *token;
     command_t *commands = malloc(sizeof(command_t));
-       
+
     commands[0].op = NULL;
     commands[0].argv = malloc(sizeof(char*));
-    
+
     token = strtok(cmd, " ");
 
-    while (token != NULL) 
+    while (token != NULL)
     {
         if (*token == ';' || *token == '&' || *token == '|') {
             /* End the current command and start a new one */

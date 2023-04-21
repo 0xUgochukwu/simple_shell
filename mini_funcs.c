@@ -8,8 +8,7 @@
  *
  * Return: void
  */
-
-void parse_command(char *cmd)
+command_t *parse_command(char *cmd)
 {
 	command_t *commands = NULL;
 	char *cmd_copy = NULL;
@@ -18,7 +17,7 @@ void parse_command(char *cmd)
 	cmd_copy = replace_vars(cmd_copy);
 	commands = split(cmd_copy);
 
-	execute_commands(commands);
+	return (commands);
 }
 
 

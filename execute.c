@@ -9,27 +9,49 @@
  */
 
 
-int execute_commands(command_t *cmds)
-{
-	int i, status = 0, op_check;
+int execute_commands(command_t *commands) {
+    int i, status;
+    pid_t pid;
 
-	for (i = 0; cmds[i].cmd; i++)
-	{
-		if (cmds[i].op == NULL)
-			status = execute_cmd(cmds[i]);
-		else
-		{
-			op_check = operator_check(cmds[i].op, status);
-			if (op_check)
-				status = execute_cmd(cmds[i]);
-			else
-				return (status);
-		}
-	}
+    for (i = 0; commands[i].cmd != NULL; i++) {
+        pid = fork();
 
-	return (status);
+        if (pid == -1) {
+            perror("fork");
+            return EXIT_FAILURE;
+        }
+
+        if (pid == 0) {
+            /* Child process */
+            execvp(commands[i].cmd, commands[i].argv);
+            perror("execvp");
+            exit(EXIT_FAILURE);
+        }
+        else {
+            /* Parent process */
+            if (waitpid(pid, &status, 0) == -1) {
+                perror("waitpid");
+                return EXIT_FAILURE;
+            }
+
+            if (WIFEXITED(status)) {
+                /* Child process terminated normally */
+                if (WEXITSTATUS(status) != 0) {
+                    fprintf(stderr, "Command \"%s\" failed with exit code %d\n",
+                            commands[i].cmd, WEXITSTATUS(status));
+                    return EXIT_FAILURE;
+                }
+            }
+            else {
+                /* Child process terminated abnormally */
+                fprintf(stderr, "Command \"%s\" terminated abnormally\n", commands[i].cmd);
+                return EXIT_FAILURE;
+            }
+        }
+    }
+
+    return EXIT_SUCCESS;
 }
-
 
 /**
  * operator_check - checks using an operator if the next command
