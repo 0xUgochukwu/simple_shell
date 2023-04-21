@@ -94,8 +94,10 @@ int execute_cmd(command_t cmd_s)
 			return (pid);
 		else if (pid == 0)
 		{
-			if (execve(path, cmd_s.argv, environ) == -1)
-				return (-1);
+			execve(path, cmd_s.argv, environ);
+
+			perror("execve");
+			exit(EXIT_FAILURE);
 		}
 		else
 			wait(&status);
