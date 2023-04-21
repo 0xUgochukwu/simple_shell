@@ -1,5 +1,7 @@
 #include "main.h"
 
+extern char **environ;
+
 
 /**
  * execute_commands - executes all comands from user
@@ -24,7 +26,7 @@ int execute_commands(command_t *commands) {
 
         if (pid == 0) {
             /* Child process */
-            execvp(commands[i].cmd, commands[i].argv);
+            execve(commands[i].cmd, commands[i].argv, environ);
             perror("execvp");
             exit(EXIT_FAILURE);
         }
