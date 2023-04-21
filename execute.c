@@ -13,7 +13,8 @@ int execute_commands(command_t *commands) {
     int i, status;
     pid_t pid;
 
-    for (i = 0; commands[i].cmd != NULL; i++) {
+    i = 0;
+    for (i = 0; i < num_commands; i++) {
         pid = fork();
 
         if (pid == -1) {

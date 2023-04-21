@@ -11,10 +11,11 @@
 
 command_t *split(char *cmd)
 {
-    int argc = 0, num_commands = 1;
+    int argc = 0;
     char *token;
     command_t *commands = malloc(sizeof(command_t));
 
+    num_commands = 1;
     commands[0].op = NULL;
     commands[0].argv = malloc(sizeof(char*));
 
