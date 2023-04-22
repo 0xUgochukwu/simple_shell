@@ -69,25 +69,13 @@ int operator_check(char *op, int status)
 
 int execute_cmd(command_t cmd_s)
 {
-	char **paths = get_paths();
-	char *path = malloc(BUFFSIZE);
-	struct stat sb;
-	int i, status = -1;
+	char *path = get_path(cmd_s.cmd);
+	int status = -1;
 	pid_t pid;
 
 	status = builtin_check(cmd_s.cmd);
 
-	for (i = 0; i < num_paths; i++)
-	{
-		sprintf(path, "%s/%s", strdup(paths[i]), cmd_s.cmd);
-		printf("%s\n", path);
-		status = stat(path, &sb);
-		printf("%d\n", num_paths);
-		if (status == 0)
-			break;
-	}
-
-	if (status == -1)
+	if (!(status == -1)  || path == NULL)
 	{
 		perror("path");
 		return (EXIT_FAILURE);
@@ -135,10 +123,6 @@ int execute_cmd(command_t cmd_s)
 			return EXIT_FAILURE;
 		}
 	}
-	i = 0;
-	while (paths[i++])
-		free(paths[i]);
-	free(paths);
 
 	return (status);
 }
@@ -167,6 +151,41 @@ char **get_paths(void)
 	}
 
 	return paths;
+}
+
+/**
+ * get_path - gets the full path of a command
+ * @cmd: command to get path
+ * Return: full path of cmd or null
+ */
+
+char *get_path(char *cmd)
+{
+	char *path = getenv("PATH");
+	char *token = strtok(strdup(path), ":");
+	struct stat st;
+	char *full_path = NULL;
+
+	while (token != NULL)
+	{
+		full_path = malloc(strlen(token) + strlen(cmd) + 2);
+		sprintf(full_path, "%s/%s", token, cmd);
+
+		if (stat(full_path, &st) == 0 && st.st_mode & S_IXUSR)
+			return (full_path);
+
+		if (full_path != NULL)
+		{
+                        free(full_path);
+                        full_path = NULL;
+                }
+
+		token = strtok(NULL, ":");
+	}
+
+
+
+	return (NULL);
 }
 
 /**

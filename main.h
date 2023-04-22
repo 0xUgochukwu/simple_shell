@@ -33,6 +33,7 @@ command_t *split(char *cmd);
 int execute_commands(command_t *cmds);
 int builtin_check(char *cmd);
 char **get_paths(void);
+char *get_path(char* cmd);
 int execute_cmd(command_t cmd_s);
 int operator_check(char *op, int status);
 #endif
