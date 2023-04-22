@@ -11,49 +11,25 @@ extern char **environ;
  */
 
 
-int execute_commands(command_t *commands) {
-    int i, status;
-    pid_t pid;
+int execute_commands(command_t *cmds)
+{
+	int i, status, op_check;
 
-    i = 0;
-    for (i = 0; i < num_commands; i++) {
-        pid = fork();
+	for (i = 0; i < num_commands; i++)
+	{
+		if (cmds[i].op == NULL)
+			status = execute_cmd(cmds[i]);
+		else
+		{
+			op_check = operator_check(cmds[i].op, status);
+			if (op_check)
+				status = execute_cmd(cmds[i]);
+			else
+				return (status);
+		}
+	}
 
-        if (pid == -1) {
-            perror("fork");
-            return EXIT_FAILURE;
-        }
-
-        if (pid == 0) {
-            /* Child process */
-            execve(commands[i].cmd, commands[i].argv, environ);
-            perror("execvp");
-            exit(EXIT_FAILURE);
-        }
-        else {
-            /* Parent process */
-            if (waitpid(pid, &status, 0) == -1) {
-                perror("waitpid");
-                return EXIT_FAILURE;
-            }
-
-            if (WIFEXITED(status)) {
-                /* Child process terminated normally */
-                if (WEXITSTATUS(status) != 0) {
-                    fprintf(stderr, "Command \"%s\" failed with exit code %d\n",
-                            commands[i].cmd, WEXITSTATUS(status));
-                    return EXIT_FAILURE;
-                }
-            }
-            else {
-                /* Child process terminated abnormally */
-                fprintf(stderr, "Command \"%s\" terminated abnormally\n", commands[i].cmd);
-                return EXIT_FAILURE;
-            }
-        }
-    }
-
-    return EXIT_SUCCESS;
+	return (status);
 }
 
 /**
@@ -94,43 +70,75 @@ int operator_check(char *op, int status)
 int execute_cmd(command_t cmd_s)
 {
 	char **paths = get_paths();
-	char *path;
+	char *path = malloc(BUFFSIZE);
 	struct stat sb;
 	int i, status = -1;
 	pid_t pid;
 
 	status = builtin_check(cmd_s.cmd);
-	if (status == -1)
+
+	for (i = 0; i < num_paths; i++)
 	{
-		for (i = 0; i < num_paths; i++)
-		{
-			path = strcat(paths[i], "/");
-			strcat(path, cmd_s.cmd);
-			status = stat(path, &sb);
-			if (status == 0)
-				break;
-		}
-
-		free(paths);
-		if (status == -1)
-			return (status);
-		pid = fork();
-		if (pid == -1)
-			return (pid);
-		else if (pid == 0)
-		{
-			execve(path, cmd_s.argv, environ);
-
-			perror("execve");
-			exit(EXIT_FAILURE);
-		}
-		else
-			wait(&status);
+		sprintf(path, "%s/%s", strdup(paths[i]), cmd_s.cmd);
+		printf("%s\n", path);
+		status = stat(path, &sb);
+		printf("%d\n", num_paths);
+		if (status == 0)
+			break;
 	}
 
+	if (status == -1)
+	{
+		perror("path");
+		return (EXIT_FAILURE);
+	}
+
+	pid = fork();
+
+
+	if (pid == -1)
+	{
+		perror("fork");
+		return (EXIT_FAILURE);
+	}
+
+	if (pid == 0)
+	{
+		/* Child process */
+		execve(path, cmd_s.argv, environ);
+		perror("execvp");
+		exit(EXIT_FAILURE);
+	}
+	else
+	{
+		/* Parent process */
+		if (waitpid(pid, &status, 0) == -1)
+		{
+			perror("waitpid");
+			return (EXIT_FAILURE);
+		}
+
+		if (WIFEXITED(status))
+		{
+			/* Child process terminated normally */
+			if (WEXITSTATUS(status) != 0)
+			{
+				fprintf(stderr, "Command \"%s\" failed with exit code %d\n",
+						cmd_s.cmd, WEXITSTATUS(status));
+				return (EXIT_FAILURE);
+			}
+		}
+		else
+		{
+			/* Child process terminated abnormally */
+			fprintf(stderr, "Command \"%s\" terminated abnormally\n", cmd_s.cmd);
+			return EXIT_FAILURE;
+		}
+	}
 	i = 0;
 	while (paths[i++])
 		free(paths[i]);
+	free(paths);
 
 	return (status);
 }
@@ -150,9 +158,11 @@ char **get_paths(void)
 	num_paths = 0;
 	while (token != NULL)
 	{
+
 		paths[num_paths] = malloc(BUFFSIZE);
 		strcpy(paths[num_paths], token);
 		token = strtok(NULL, ":");
+		printf("%s\n", paths[num_paths]);
 		num_paths++;
 	}
 
