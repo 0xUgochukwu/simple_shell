@@ -176,7 +176,7 @@ char *get_path(char *cmd)
  * Return: status
  */
 
-int builtin_check(char __attribute__((unused)) *cmd, char **args)
+int builtin_check(char *cmd, char **args)
 {
 	cmds_t bi_cmds[] = {
 		{"exit", bi_exit},
@@ -188,7 +188,10 @@ int builtin_check(char __attribute__((unused)) *cmd, char **args)
 	while (i < 2)
 	{
 		if (strcmp(cmd, bi_cmds[i].cmd) == 0)
-			return (bi_cmds[i].fnc(args));
+		{
+			bi_cmds[i].fnc(args);
+			return (0);
+		}
 		i++;
 	}
 	return (-1);
