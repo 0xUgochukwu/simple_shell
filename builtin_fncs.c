@@ -18,7 +18,7 @@ int bi_exit(char **argv)
 	else
 	{
 		perror("status");
-		return (EXIT_FAILURE);
+		return (1);
 	}
 }
 
@@ -35,7 +35,7 @@ int bi_env(char __attribute__((unused)) **argv)
 	char **env = environ;
 	while (*env)
 	{
-		printf("%s\n", *env);
+		fprintf(stdout, "%s\n", *env);
 		env++;
 	}
 	return (0);
@@ -43,22 +43,16 @@ int bi_env(char __attribute__((unused)) **argv)
 
 int is_num(char *str)
 {
-	int i = 0, mul = 1;
-	int num = 0;
+	char *num = str;
 
 	if (str == NULL)
 		return (0);
-	while (str[i])
-		i++;
-	while (i >= 0)
+	while (*num)
 	{
-		if (isdigit(*str) == 0)
+		if (isdigit(*num) == 0)
 			return (-1);
-		num += (str[i] * mul);
-		mul *= 10;
-		i--;
+		num++;
 	}
 
-	return (num);
-
+	return (atoi(str));
 }

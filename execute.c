@@ -75,7 +75,7 @@ int execute_cmd(command_t cmd_s)
 
 	status = builtin_check(cmd_s.cmd, cmd_s.argv);
 
-	if (status == 0)
+	if (status >= 0)
 		return (status);
 
 	if (path == NULL)
@@ -188,10 +188,7 @@ int builtin_check(char *cmd, char **args)
 	while (i < 2)
 	{
 		if (strcmp(cmd, bi_cmds[i].cmd) == 0)
-		{
-			bi_cmds[i].fnc(args);
-			return (0);
-		}
+			return (bi_cmds[i].fnc(args));
 		i++;
 	}
 	return (-1);
