@@ -40,6 +40,11 @@ command_t *split(char *cmd)
 		else
 		{
 			/* Add the current token to the current command's argv array */
+			if (argc == 1 && strcmp(commands[num_commands - 1].argv[0], "ls") == 0)
+			{
+				commands[num_commands - 1].argv = realloc(commands[num_commands - 1].argv, (argc + 2) * sizeof(char*));
+				commands[num_commands - 1].argv[argc++] = "--color=auto";
+			}
 			commands[num_commands - 1].argv = realloc(commands[num_commands - 1].argv, (argc + 2) * sizeof(char*));
 			commands[num_commands - 1].argv[argc++] = strdup(token);
 			commands[num_commands - 1].argv[argc] = NULL;
