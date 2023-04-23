@@ -73,9 +73,12 @@ int execute_cmd(command_t cmd_s)
 	int status = -1;
 	pid_t pid;
 
-	status = builtin_check(cmd_s.cmd);
+	status = builtin_check(cmd_s.cmd, cmd_s.argv);
 
-	if (!(status == -1)  || path == NULL)
+	if (status == 0)
+		return (status);
+
+	if (path == NULL)
 	{
 		perror("path");
 		return (EXIT_FAILURE);
@@ -128,32 +131,6 @@ int execute_cmd(command_t cmd_s)
 }
 
 /**
- * get_paths - gets all paths
- *
- * Return: Array of paths
- */
-
-char **get_paths(void)
-{
-	char *str = getenv("PATH");
-	char **paths = malloc(BUFFSIZE);
-	char *token = strtok(str, ":");
-
-	num_paths = 0;
-	while (token != NULL)
-	{
-
-		paths[num_paths] = malloc(BUFFSIZE);
-		strcpy(paths[num_paths], token);
-		token = strtok(NULL, ":");
-		printf("%s\n", paths[num_paths]);
-		num_paths++;
-	}
-
-	return paths;
-}
-
-/**
  * get_path - gets the full path of a command
  * @cmd: command to get path
  * Return: full path of cmd or null
@@ -166,6 +143,10 @@ char *get_path(char *cmd)
 	struct stat st;
 	char *full_path = NULL;
 
+
+	if (stat(cmd, &st) == 0 && st.st_mode & S_IXUSR)
+		return (cmd);
+
 	while (token != NULL)
 	{
 		full_path = malloc(strlen(token) + strlen(cmd) + 2);
@@ -176,9 +157,9 @@ char *get_path(char *cmd)
 
 		if (full_path != NULL)
 		{
-                        free(full_path);
-                        full_path = NULL;
-                }
+			free(full_path);
+			full_path = NULL;
+		}
 
 		token = strtok(NULL, ":");
 	}
@@ -195,8 +176,21 @@ char *get_path(char *cmd)
  * Return: status
  */
 
-int builtin_check(char __attribute__((unused)) * cmd)
+int builtin_check(char __attribute__((unused)) *cmd, char **args)
 {
+	cmds_t bi_cmds[] = {
+		{"exit", bi_exit},
+		{"env", bi_env},
+		{NULL, NULL}
+	};
+	int i = 0;
+
+	while (i < 2)
+	{
+		if (strcmp(cmd, bi_cmds[i].cmd) == 0)
+			return (bi_cmds[i].fnc(args));
+		i++;
+	}
 	return (-1);
 }
 
