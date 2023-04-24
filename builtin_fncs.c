@@ -6,7 +6,7 @@ extern char **environ;
  * bi_exit - ...
  *
  * @argv:
- * Return
+ * Return: int
  */
 
 int bi_exit(char **argv)
@@ -26,8 +26,8 @@ int bi_exit(char **argv)
 /**
  * bi_env - ...
  *
- * @argv:
- * Return
+ * @argv: 
+ * Return: int
  */
 
 int bi_env(char __attribute__((unused)) **argv)
@@ -40,6 +40,67 @@ int bi_env(char __attribute__((unused)) **argv)
 	}
 	return (0);
 }
+
+/**
+ * bi_cd - ...
+ *
+ * @argv:
+ * Return: int
+ */
+
+int bi_cd(char __attribute__((unused)) **argv)
+{
+	char **env = environ;
+	while (*env)
+	{
+		fprintf(stdout, "%s\n", *env);
+		env++;
+	}
+	return (0);
+}
+
+/**
+ * bi_setenv - ...
+ *
+ * @argv:
+ * Return: int
+ */
+
+int bi_setenv(char __attribute__((unused)) **argv)
+{
+	char **env = environ;
+	while (*env)
+	{
+		fprintf(stdout, "%s\n", *env);
+		env++;
+	}
+	return (0);
+}
+
+/**
+ * bi_unsetenv - ...
+ *
+ * @argv:
+ * Return: int
+ */
+
+int bi_unsetenv(char __attribute__((unused)) **argv)
+{
+	char **env = environ;
+	while (*env)
+	{
+		fprintf(stdout, "%s\n", *env);
+		env++;
+	}
+	return (0);
+}
+
+/**
+ * is_num - ...
+ *
+ * @argv:
+ * Return: int
+ */
 
 int is_num(char *str)
 {

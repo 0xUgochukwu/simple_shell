@@ -3,11 +3,13 @@
 /**
  * main - simple shell
  *
- * argc: argument count
- * argv: list of arguments
+ * @ac: argument count
+ * @av: list of arguments
+ *
+ * Return: int
  */
 
-int main (int __attribute__((unused)) ac, char **av) 
+int main(int __attribute__((unused)) ac, char **av)
 {
 	char *err_msg = malloc(1024);
 	int err_len;
