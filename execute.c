@@ -28,6 +28,7 @@ int execute_commands(command_t *cmds)
 				return (status);
 		}
 	}
+	printf("%d\n", status);
 
 	main_status = status;
 
@@ -71,66 +72,67 @@ int operator_check(char *op, int status)
 
 int execute_cmd(command_t cmd_s)
 {
-	char *path = get_path(cmd_s.cmd);
-	int status = -1;
-	pid_t pid;
+    char *path = get_path(cmd_s.cmd);
+    int status = -1;
+    pid_t pid;
 
-	status = builtin_check(cmd_s.cmd, cmd_s.argv);
+    status = builtin_check(cmd_s.cmd, cmd_s.argv);
 
-	if (status == 0)
-		return (status);
+    if (status >= 0)
+        return (status);
 
-	if (path == NULL)
-	{
-		perror("path");
-		return (EXIT_FAILURE);
-	}
+    if (path == NULL)
+    {
+        perror("path");
+        return (EXIT_FAILURE);
+    }
 
-	pid = fork();
+    pid = fork();
 
+    if (pid == -1)
+    {
+        perror("fork");
+        return (EXIT_FAILURE);
+    }
 
-	if (pid == -1)
-	{
-		perror("fork");
-		return (EXIT_FAILURE);
-	}
+    if (pid == 0)
+    {
+        /* Child process */
+        execve(path, cmd_s.argv, environ);
+        perror("execvp");
+        exit(EXIT_FAILURE);
+    }
+    else
+    {
+        /* Parent process */
+        if (waitpid(pid, &status, 0) == -1)
+        {
+            perror("waitpid");
+            return (EXIT_FAILURE);
+        }
 
-	if (pid == 0)
-	{
-		/* Child process */
-		execve(path, cmd_s.argv, environ);
-		perror("execvp");
-		exit(EXIT_FAILURE);
-	}
-	else
-	{
-		/* Parent process */
-		if (waitpid(pid, &status, 0) == -1)
-		{
-			perror("waitpid");
-			return (EXIT_FAILURE);
-		}
+        if (WIFEXITED(status))
+        {
+            /* Child process terminated normally */
+            if (WEXITSTATUS(status) != 0)
+            {
+                fprintf(stderr, "Command \"%s\" failed with exit code %d\n",
+                        cmd_s.cmd, WEXITSTATUS(status));
+                return (WEXITSTATUS(status));
+            }
+        }
+        else
+        {
+            /* Child process terminated abnormally */
+            fprintf(stderr, "Command \"%s\" terminated abnormally\n", cmd_s.cmd);
+            return (status);
+        }
+    }
 
-		if (WIFEXITED(status))
-		{
-			/* Child process terminated normally */
-			if (WEXITSTATUS(status) != 0)
-			{
-				fprintf(stderr, "Command \"%s\" failed with exit code %d\n",
-						cmd_s.cmd, WEXITSTATUS(status));
-				return (EXIT_FAILURE);
-			}
-		}
-		else
-		{
-			/* Child process terminated abnormally */
-			fprintf(stderr, "Command \"%s\" terminated abnormally\n", cmd_s.cmd);
-			return EXIT_FAILURE;
-		}
-	}
-
-	return (status);
+    return (status);
 }
+
+
 
 /**
  * get_path - gets the full path of a command
@@ -178,7 +180,7 @@ char *get_path(char *cmd)
  * Return: status
  */
 
-int builtin_check(char __attribute__((unused)) *cmd, char **args)
+int builtin_check(char *cmd, char **args)
 {
 	cmds_t bi_cmds[] = {
 		{"exit", bi_exit},

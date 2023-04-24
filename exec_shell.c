@@ -26,7 +26,7 @@ void prompt (void)
 
 		execute_commands(cmds);
 
-	} while (strcmp("exit", command) != 0);
+	} while (1);
 }
 
 void execute_file(char *filename)

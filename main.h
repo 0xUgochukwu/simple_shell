@@ -45,4 +45,5 @@ char **get_paths(void);
 char *get_path(char* cmd);
 int execute_cmd(command_t cmd_s);
 int operator_check(char *op, int status);
+int is_num(char *str);
 #endif
