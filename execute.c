@@ -29,6 +29,8 @@ int execute_commands(command_t *cmds)
 		}
 	}
 
+	main_status = status;
+
 	return (status);
 }
 

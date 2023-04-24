@@ -23,6 +23,8 @@ command_t *split(char *cmd)
 
 	while (token != NULL)
 	{
+		if (*token == '#')
+			break;
 		if (*token == ';' || *token == '&' || *token == '|') {
 			/* End the current command and start a new one */
 

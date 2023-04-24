@@ -15,6 +15,7 @@
 
 int num_commands;
 
+extern int main_status;
 extern char **environ;
 
 typedef struct {
@@ -35,6 +36,7 @@ void execute_file(char *filename);
 void prompt(void);
 command_t *parse_command(char *cmd);
 char *replace_aliases(char *cmd);
+char *replace_s_vars(char *cmd);
 char *replace_vars(char *cmd);
 command_t *split(char *cmd);
 int execute_commands(command_t *cmds);
