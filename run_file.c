@@ -37,7 +37,6 @@ void run_file(char *file_name)
 			execute_commands(cmds);
 			free_commands(cmds, num_commands);
 		}
-		num_commands++;
 	}
 
 	if (line != NULL)
@@ -47,7 +46,6 @@ void run_file(char *file_name)
 
 }
 
-
 /**
  * free_commands - frees the memory allocated for a command_t struct
  *
@@ -56,27 +54,28 @@ void run_file(char *file_name)
 
 void free_commands(command_t *cmds, size_t n_cmds)
 {
-    size_t i, j;
+	size_t i, j;
 
-    for (i = 0; i < n_cmds; i++)
-    {
-        free(cmds[i].cmd);
-        free(cmds[i].op);
+	for (i = 0; i < n_cmds; i++)
+	{
+		free(cmds[i].cmd);
+		free(cmds[i].op);
 
-        if (cmds[i].argv != NULL)
-        {
-            j = 0;
-            while (cmds[i].argv[j])
-            {
-                free(cmds[i].argv[j]);
-                cmds[i].argv[j] = NULL; 
-                j++;
-            }
-            free(cmds[i].argv);
-            cmds[i].argv = NULL; 
-        }
-    }
+		if (cmds[i].argv != NULL)
+		{
+			j = 0;
+			while (cmds[i].argv[j])
+			{
+				free(cmds[i].argv[j]);
+				cmds[i].argv[j] = NULL; 
+				j++;
+			}
+			free(cmds[i].argv);
+			cmds[i].argv = NULL; 
+		}
+	}
 
-    free(cmds);
+	if (cmds != NULL)
+		free(cmds);
 }
 
