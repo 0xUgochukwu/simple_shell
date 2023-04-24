@@ -28,7 +28,6 @@ int execute_commands(command_t *cmds)
 				return (status);
 		}
 	}
-	printf("%d\n", status);
 
 	main_status = status;
 
