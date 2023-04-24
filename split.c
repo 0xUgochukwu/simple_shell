@@ -61,4 +61,4 @@ command_t *split(char *cmd)
 		commands[num_commands - 1].cmd = NULL;
 
 	return (commands);
-
+}
