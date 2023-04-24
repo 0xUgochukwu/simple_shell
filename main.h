@@ -10,11 +10,13 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
+#include <fcntl.h>
 
 #define BUFFSIZE 1024
 
 int num_commands;
 
+extern int main_status;
 extern char **environ;
 
 typedef struct {
@@ -35,6 +37,7 @@ void execute_file(char *filename);
 void prompt(void);
 command_t *parse_command(char *cmd);
 char *replace_aliases(char *cmd);
+char *replace_s_vars(char *cmd);
 char *replace_vars(char *cmd);
 command_t *split(char *cmd);
 int execute_commands(command_t *cmds);
@@ -44,4 +47,6 @@ char *get_path(char* cmd);
 int execute_cmd(command_t cmd_s);
 int operator_check(char *op, int status);
 int is_num(char *str);
+void run_file(char *file_name);
+void free_commands(command_t *cmds, size_t n_cmds);
 #endif

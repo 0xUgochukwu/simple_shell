@@ -25,6 +25,9 @@ command_t *split(char *cmd)
 	{
 		if (*token == ';' || *token == '&' || *token == '|')
 		{
+		if (*token == '#')
+			break;
+		if (*token == ';' || *token == '&' || *token == '|') {
 			/* End the current command and start a new one */
 
 			if (argc > 0)

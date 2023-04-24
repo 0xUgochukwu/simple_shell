@@ -1,0 +1,10 @@
+ls
+echo hello world
+mkdir new_dir
+touch file.txt
+mv file.txt new_file
+touch empty_file.txt
+rm -f empty_file.txt
+cp file.txt file_copy.txt
+ls -la
+echo I'm done

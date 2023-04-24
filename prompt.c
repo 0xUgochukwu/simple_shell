@@ -28,10 +28,3 @@ void prompt (void)
 
 	} while (1);
 }
-
-void execute_file(char *filename)
-{
-	printf("My file is %s\n", filename);
-}
-
-
