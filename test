@@ -1,0 +1,11 @@
+ls
+echo hello world
+grep "pattern" file.txt
+mkdir new_dir
+cat file.txt
+man printf
+mv file.txt new_file.txt
+touch empty_file.txt
+rm -f empty_file.txt
+cp file.txt file_copy.txt
+ls -la

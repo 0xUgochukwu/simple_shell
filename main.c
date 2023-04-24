@@ -25,6 +25,11 @@ int main (int __attribute__((unused)) ac, char **av)
 	}
 	else
 	{
+		if (ac == 2)
+		{
+			run_file(av[1]);
+			exit(main_status);
+		}
 		if (!isatty(STDIN_FILENO))
 		{
 			fflush(stdout);

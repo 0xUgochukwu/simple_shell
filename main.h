@@ -10,6 +10,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
+#include <fcntl.h>
 
 #define BUFFSIZE 1024
 
@@ -46,4 +47,6 @@ char *get_path(char* cmd);
 int execute_cmd(command_t cmd_s);
 int operator_check(char *op, int status);
 int is_num(char *str);
+void run_file(char *file_name);
+void free_commands(command_t *cmds, size_t n_cmds);
 #endif
