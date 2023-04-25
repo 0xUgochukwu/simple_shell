@@ -1,5 +1,7 @@
 #include "main.h"
 
+char **environ;
+
 /**
  * bi_exit - ...
  *

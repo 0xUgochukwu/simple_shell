@@ -1,5 +1,6 @@
 #include "main.h"
 
+int main_status = 0;
 /**
  * parse_command - format a command to be executed
  * @cmd: command to parse
@@ -43,7 +44,6 @@ char *replace_s_vars(char *cmd)
 	char *p = new_cmd;
 	char *s = cmd;
 
-	main_status = 0;
 	while (*s)
 	{
 		if (s[0] == '$' && s[1] == '?')

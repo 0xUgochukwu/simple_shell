@@ -50,6 +50,18 @@ int bi_alias(char __attribute__((unused)) **argv)
 	while (argv[i])
 	{
 		printf("%s\n", argv[i]);
+		while (token != NULL)
+		{
+			if (j == 0)
+				alias_name = token;
+			alias = token;
+			token = strtok(strdup(argv[i]), "=");
+			token = strtok(NULL, "=");
+			j++;
+		}
+		printf("%s\n", alias_name);
+		printf("%s\n", alias);
+		i++;
 	}
 
 	return (0);
