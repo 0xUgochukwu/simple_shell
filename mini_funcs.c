@@ -33,7 +33,7 @@ command_t *parse_command(char *cmd)
 
 char *replace_aliases(char *cmd)
 {
-	return cmd;
+	return (cmd);
 }
 
 /**
@@ -74,7 +74,7 @@ char *replace_s_vars(char *cmd)
 	/* Null-terminate the new string */
 	*p = '\0';
 
-	return new_cmd;
+	return (new_cmd);
 }
 
 
@@ -101,7 +101,7 @@ char *replace_vars(char *cmd)
 		{
 			p++;
 
-			while (*p != '\0' && isalnum(*p))
+			while (*p != '\0' && (isalnum(*p) || *p == '_'))
 			{
 				var_name[i] = *p;
 				i++;

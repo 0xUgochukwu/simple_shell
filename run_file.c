@@ -50,6 +50,7 @@ void run_file(char *file_name)
  * free_commands - frees the memory allocated for a command_t struct
  *
  * @cmds: command_t struct to be freed
+ * @n_cmds: number of commands
  */
 
 void free_commands(command_t *cmds, size_t n_cmds)
