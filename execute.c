@@ -1,6 +1,6 @@
 #include "main.h"
 
-char **environ;
+extern char **environ;
 
 /**
  * execute_commands - executes all comands from user
@@ -72,7 +72,7 @@ int execute_cmd(command_t cmd_s)
 	char *path = get_path(cmd_s.cmd);
 	int status = -1;
 	pid_t pid;
-
+	
 	replace_vars(cmd_s);
 	status = builtin_check(cmd_s.cmd, cmd_s.argv);
 

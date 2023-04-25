@@ -1,6 +1,6 @@
 #include "main.h"
 
-char **environ;
+extern char **environ;
 
 /**
  * bi_exit - ...
@@ -82,7 +82,6 @@ int bi_setenv(char **argv)
 	return (0);
 }
 
-
 /**
  * bi_unsetenv - ...
  *
@@ -123,7 +122,6 @@ int bi_unsetenv(char **argv)
 
 	return (0);
 }
-
 
 /**
  * is_num - checks if value passed is a num

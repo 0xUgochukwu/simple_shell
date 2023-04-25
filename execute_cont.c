@@ -11,10 +11,11 @@ void replace_vars(command_t cmd)
 {
 	int i = 1, j = 0;
 	char **args = cmd.argv;
-	char var[256];
+	char *var;
 
 	while (args[i])
 	{
+		var = malloc(strlen(args[i]) * sizeof(char));
 		if (args[i][j] == '$')
 		{
 			j++;
@@ -23,6 +24,7 @@ void replace_vars(command_t cmd)
 				var[j - 1] = args[i][j];
 				j++;
 			}
+
 			var[j] = '\0';
 			strcpy(cmd.argv[i], getenv(var));
 		}
