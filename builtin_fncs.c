@@ -165,11 +165,27 @@ int bi_cd(char __attribute__((unused)) **argv)
 
 int bi_alias(char __attribute__((unused)) **argv)
 {
-	char **env = environ;
-	while (*env)
+	int i = 1, j = 0;
+	char *alias_name, *alias, *token;
+
+	alias_name = malloc(BUFFSIZE);
+	alias = malloc(BUFFSIZE);
+
+	while (argv[i])
 	{
-		fprintf(stdout, "%s\n", *env);
-		env++;
+		printf("%s\n", argv[i]);
+		while (token != NULL)
+		{
+			if (j == 0)
+				alias_name = token;
+			alias = token;
+			token = strtok(strdup(argv[i]), "=");
+			token = strtok(NULL, "=");
+			j++;
+		}
+		printf("%s\n", alias_name);
+		printf("%s\n", alias);
+		i++;
 	}
 	return (0);
 }

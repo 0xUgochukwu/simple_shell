@@ -14,12 +14,19 @@
 
 #define BUFFSIZE 1024
 
-int num_commands;
-
+extern int num_commands;
 extern int main_status;
 extern char **environ;
 
-typedef struct {
+/**
+ * struct cmds - struct for builtin commands
+ * @cmd: command
+ * @fnc: builtin function
+ *
+ */
+
+typedef struct cmds
+{
 	char *cmd;
 	int (*fnc)(char **argv);
 } cmds_t;
@@ -31,7 +38,15 @@ int bi_alias(char **argv);
 int bi_setenv(char **argv);
 int bi_unsetenv(char **argv);
 
-typedef struct {
+/**
+ * struct command - arguments struct
+ * @cmd: builtin commands
+ * @op: Operator
+ * @argv: Argument Variables
+ *
+ */
+typedef struct command
+{
 	char *cmd;
 	char *op;
 	char **argv;
@@ -47,7 +62,7 @@ command_t *split(char *cmd);
 int execute_commands(command_t *cmds);
 int builtin_check(char *cmd, char **argv);
 char **get_paths(void);
-char *get_path(char* cmd);
+char *get_path(char *cmd);
 int execute_cmd(command_t cmd_s);
 int operator_check(char *op, int status);
 int is_num(char *str);

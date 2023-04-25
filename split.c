@@ -1,5 +1,6 @@
 #include "main.h"
 
+int num_commands = 1;
 
 /**
  * split - split a command into an array of commands
@@ -11,63 +12,41 @@
 
 command_t *split(char *cmd)
 {
-	int argc = 0;
+	int argc = 0, i = 0;
 	char *token;
 	command_t *commands = malloc(sizeof(command_t));
 
-	num_commands = 1;
 	commands[0].op = NULL;
 	commands[0].argv = malloc(sizeof(char *));
-
 	token = strtok(cmd, " ");
 
 	while (token != NULL)
 	{
+		i = num_commands - 1;
 		if (*token == '#')
 			break;
 		if (*token == ';' || *token == '&' || *token == '|')
 		{
-			/* End the current command and start a new one */
-
 			if (argc > 0)
-				commands[num_commands - 1].cmd = commands[num_commands - 1].argv[0];
+				commands[i].cmd = commands[i].argv[0];
 			else
-				commands[num_commands - 1].cmd = NULL;
+				commands[i].cmd = NULL;
 
 			commands = realloc(commands, (++num_commands) * sizeof(command_t));
-			commands[num_commands - 1].op = (*token == ';') ? NULL : token;
-			commands[num_commands - 1].argv = malloc(sizeof(char *));
-
+			commands[++i].op = (*token == ';') ? NULL : token;
+			commands[i].argv = malloc(sizeof(char *));
 			argc = 0;
 		}
 		else
 		{
-			/* Add the current token to the current command's argv array */
-			if (argc == 1 && strcmp(commands[num_commands - 1].argv[0], "ls") == 0)
-			{
-				commands[num_commands - 1].argv = realloc(commands[num_commands - 1].argv, (argc + 2) * sizeof(char *));
-				commands[num_commands - 1].argv[argc++] = "--color=auto";
-			}
-			commands[num_commands - 1].argv = realloc(commands[num_commands - 1].argv, (argc + 2) * sizeof(char *));
-			commands[num_commands - 1].argv[argc++] = strdup(token);
-			commands[num_commands - 1].argv[argc] = NULL;
+			commands[i].argv = realloc(commands[i].argv, (argc + 2) * sizeof(char *));
+			commands[i].argv[argc++] = strdup(token);
+			commands[i].argv[argc] = NULL;
 		}
-
 		token = strtok(NULL, " ");
 	}
-
-	/* Set the last command's cmd field */
 	if (argc > 0)
-	{
 		commands[num_commands - 1].cmd = commands[num_commands - 1].argv[0];
-		if (argc == 1 && strcmp(commands[num_commands - 1].argv[0], "ls") == 0)
-		{
-			commands[num_commands - 1].argv = realloc(commands[num_commands - 1].argv, (argc + 2) * sizeof(char *));
-			commands[num_commands - 1].argv[argc++] = "--color=auto";
-			commands[num_commands - 1].argv[argc] = NULL;
-		}
-	}
-
 	else
 		commands[num_commands - 1].cmd = NULL;
 
