@@ -22,8 +22,6 @@ command_t *parse_command(char *cmd)
 	return (commands);
 }
 
-
-
 /**
  * replace_aliases - replace aliases in a command
  * @cmd: command to replace aliases in
@@ -42,6 +40,7 @@ char *replace_aliases(char *cmd)
  *
  * Return: a string with variables replaced
  */
+
 char *replace_s_vars(char *cmd)
 {
 	char *new_cmd = malloc(strlen(cmd) * sizeof(char) + 1);
@@ -75,87 +74,4 @@ char *replace_s_vars(char *cmd)
 	*p = '\0';
 
 	return (new_cmd);
-}
-
-
-
-/**
- * replace_vars - replace variables in a command
- * @cmd: command to replace variables in
- *
- * Return: pointer to new string
- */
-
-char *replace_vars(char *cmd)
-{
-	char *result = NULL, *p = cmd, *q = NULL;
-	char var_name[256] = {0},  *var_value = NULL;
-	int i = 0;
-
-	while (*p != '\0') 
-	{
-		if (*p == '$' && *(p + 1) != '\0')
-		{
-			p++;
-			while (*p != '\0' && (isalnum(*p) || *p == '_'))
-			{
-				var_name[i] = *p;
-				i++;
-				p++;
-			}
-
-			var_name[i] = '\0';
-			var_value = getenv(var_name);
-
-			if (var_value != NULL)
-				helper_fnc(var_value);
-			else
-				helper_fnc(var_name);
-		}
-		else 
-		{
-			if (result == NULL)
-			{
-				result = (char *)malloc(2);
-				q = result;
-			}
-			else 
-			{
-				result = (char *)realloc(result, strlen(result) + 2);
-				q = result + strlen(result);
-			}
-
-			*q = *p;
-			q++;
-			p++;
-		}
-	}
-
-	if (result == NULL)
-	{
-		result = (char *)malloc(1);
-		result[0] = '\0';
-	} else
-	{
-		q = result + strlen(result);
-		*q = '\0';
-	}
-
-	return result;
-}
-
-void helper_func(char *var)
-{
-	if (result == NULL)
-	{
-		result = (char *)malloc(strlen(cmd) + strlen(var) + 1);
-		q = result;
-	} 
-	else
-	{
-		result = (char *)realloc(result, strlen(result) + strlen(var) + 1);
-		q = result + strlen(result);
-	}
-
-	q += sprintf(q, "%s", var);
 }
