@@ -1,7 +1,5 @@
 #include "main.h"
 
-extern char **environ;
-
 /**
  * bi_exit - ...
  *
@@ -32,7 +30,7 @@ int bi_exit(char **argv)
 
 int bi_env(char __attribute__((unused)) **argv)
 {
-	char **env = environ;
+	char **env = get_environ();
 
 	while (*env)
 	{
@@ -51,7 +49,7 @@ int bi_env(char __attribute__((unused)) **argv)
 
 int bi_setenv(char **argv)
 {
-	char **env = environ;
+	char **env = get_environ(), **environ = env;
 	char *newenv, *envname;
 	int i = 0, j = -1;
 
@@ -79,6 +77,8 @@ int bi_setenv(char **argv)
 		environ[i] = NULL;
 	}
 
+	set_environ(environ);
+
 	return (0);
 }
 
@@ -91,7 +91,7 @@ int bi_setenv(char **argv)
 
 int bi_unsetenv(char **argv)
 {
-	char **env = environ;
+	char **env = get_environ(), **environ = env;
 	char *envname;
 	int i = 0, j = -1;
 
@@ -119,6 +119,7 @@ int bi_unsetenv(char **argv)
 	}
 
 	environ[j] = NULL;
+	set_environ(environ);
 
 	return (0);
 }

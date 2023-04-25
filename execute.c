@@ -1,7 +1,5 @@
 #include "main.h"
 
-extern char **environ;
-
 /**
  * execute_commands - executes all comands from user
  * @cmds: array of all comands
@@ -11,7 +9,7 @@ extern char **environ;
 
 int execute_commands(command_t *cmds)
 {
-	int i, status, op_check;
+	int i, status, op_check, num_commands = get_num_commands();
 
 	for (i = 0; i < num_commands; i++)
 	{
@@ -69,10 +67,10 @@ int operator_check(char *op, int status)
 
 int execute_cmd(command_t cmd_s)
 {
-	char *path = get_path(cmd_s.cmd);
+	char *path = get_path(cmd_s.cmd), **environ = get_environ();
 	int status = -1;
 	pid_t pid;
-	
+
 	replace_vars(cmd_s);
 	status = builtin_check(cmd_s.cmd, cmd_s.argv);
 

@@ -9,7 +9,7 @@
  * Return: int
  */
 
-int main(int __attribute__((unused)) ac, char **av)
+int main(int __attribute__((unused)) ac, char **av, char **envp)
 {
 	char *err_msg = malloc(1024);
 	int err_len;
@@ -17,6 +17,10 @@ int main(int __attribute__((unused)) ac, char **av)
 	size_t len = 0;
 	ssize_t read_bytes;
 	command_t *cmds;
+
+	set_status(0);
+	set_num_commands(1);
+	set_environ(envp);
 
 	err_len = sprintf(err_msg, "Usage: %s or %s [filename]\n", av[0], av[0]);
 	if (ac > 2)

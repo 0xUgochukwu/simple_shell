@@ -14,10 +14,16 @@
 
 #define BUFFSIZE 1024
 
-extern int num_commands;
+static int __attribute__((unused)) g_num_commands;
 static int __attribute__((unused)) g_main_status;
-extern char **environ;
+static char __attribute__((unused))**g_environ;
 
+void set_status(int status);
+int get_status(void);
+void set_num_commands(int num);
+int get_num_commands(void);
+void set_environ(char **envp);
+char **get_environ(void);
 /**
  * struct cmds - struct for builtin commands
  * @cmd: command
