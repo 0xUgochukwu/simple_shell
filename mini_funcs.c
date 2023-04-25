@@ -1,6 +1,5 @@
 #include "main.h"
 
-int main_status = 0;
 /**
  * parse_command - format a command to be executed
  * @cmd: command to parse
@@ -49,7 +48,7 @@ char *replace_s_vars(char *cmd)
 		if (s[0] == '$' && s[1] == '?')
 		{
 			/* Replace $? with main_status */
-			sprintf(p, "%d", main_status);
+			sprintf(p, "%d", get_status());
 			p += strlen(p);
 			s += 2;
 		}
