@@ -88,11 +88,8 @@ char *replace_s_vars(char *cmd)
 
 char *replace_vars(char *cmd)
 {
-	char *result = NULL;
-	char *p = cmd;
-	char *q = NULL;
-	char var_name[256] = {0};
-	char *var_value = NULL;
+	char *result = NULL, *p = cmd, *q = NULL;
+	char var_name[256] = {0},  *var_value = NULL;
 	int i = 0;
 
 	while (*p != '\0') 
