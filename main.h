@@ -15,7 +15,7 @@
 #define BUFFSIZE 1024
 
 extern int num_commands;
-extern int main_status;
+static int __attribute__((unused)) g_main_status;
 extern char **environ;
 
 /**
@@ -64,9 +64,11 @@ char *get_path(char *cmd);
 char *replace_s_vars(char *cmd);
 char *replace_aliases(char *cmd);
 int is_num(char *str);
-int throw_error (char *error);
+int throw_error(char *error);
 int execute_cmd(command_t cmd_s);
 int execute_commands(command_t *cmds);
 int operator_check(char *op, int status);
 int builtin_check(char *cmd, char **argv);
+void set_status(int status);
+int get_status(void);
 #endif

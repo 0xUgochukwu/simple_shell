@@ -13,6 +13,7 @@ void prompt(void)
 	ssize_t read_bytes;
 	command_t *cmds;
 
+	set_status(0);
 	do {
 		write(STDOUT_FILENO, "$ ", 2);
 		fflush(stdout);
