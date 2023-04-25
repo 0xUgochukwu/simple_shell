@@ -1,15 +1,11 @@
 #include "main.h"
 
-extern char **environ;
-
-
 /**
  * execute_commands - executes all comands from user
  * @cmds: array of all comands
  *
  * Return: void
  */
-
 
 int execute_commands(command_t *cmds)
 {
@@ -64,7 +60,7 @@ int operator_check(char *op, int status)
 
 /**
  * execute_cmd - execute cmd
- * @cmd: command struct
+ * @cmd_s: command struct
  *
  * Return: void
  */
@@ -75,44 +71,28 @@ int execute_cmd(command_t cmd_s)
 	int status = -1;
 	pid_t pid;
 
+	replace_vars(cmd_s);
 	status = builtin_check(cmd_s.cmd, cmd_s.argv);
 
 	if (status >= 0)
 		return (status);
-
 	if (path == NULL)
-	{
-		perror("path");
-		return (EXIT_FAILURE);
-	}
-
+		return (throw_error("path"));
 	pid = fork();
-
 	if (pid == -1)
-	{
-		perror("fork");
-		return (EXIT_FAILURE);
-	}
-
+		return (throw_error("fork"));
 	if (pid == 0)
 	{
-		/* Child process */
 		execve(path, cmd_s.argv, environ);
 		perror("execvp");
 		exit(EXIT_FAILURE);
 	}
 	else
 	{
-		/* Parent process */
 		if (waitpid(pid, &status, 0) == -1)
-		{
-			perror("waitpid");
-			return (EXIT_FAILURE);
-		}
-
+			return (throw_error("waitpid"));
 		if (WIFEXITED(status))
 		{
-			/* Child process terminated normally */
 			if (WEXITSTATUS(status) != 0)
 			{
 				fprintf(stderr, "Command \"%s\" failed with exit code %d\n",
@@ -122,16 +102,12 @@ int execute_cmd(command_t cmd_s)
 		}
 		else
 		{
-			/* Child process terminated abnormally */
 			fprintf(stderr, "Command \"%s\" terminated abnormally\n", cmd_s.cmd);
 			return (status);
 		}
 	}
-
 	return (status);
 }
-
-
 
 /**
  * get_path - gets the full path of a command
@@ -173,6 +149,7 @@ char *get_path(char *cmd)
 /**
  * builtin_check - check if command is a builtin
  * @cmd: command to run
+ * @args: arguments
  *
  * Return: status
  */
@@ -198,43 +175,3 @@ int builtin_check(char *cmd, char **args)
 	}
 	return (-1);
 }
-
-/**
- * replace_vars - replace variables
- * @args: arguments
- *
- * Return: void
- */
-
-void replace_vars(command_t cmd)
-{
-	int i = 1, j = 0;
-	char **args = cmd.argv;
-	char var[256];
-
-	while (args[i])
-	{
-		if (args[i][j] == '$')
-		{
-			j++;
-			while (args[i][j] != '\0' && (isalnum(args[i][j]) || args[i][j] == '_'))
-			{
-				var[j - 1] = args[i][j];
-				j++;
-			}
-
-			printf("%s\n", var);
-			strcpy(cmd.argv[i] , getenv(var));
-		}
-
-		i++;
-		j = 0;
-	}
-}
-
-/**
- * throw_errow_error
- *
- * @error: error
- * Return: void
- */

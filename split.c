@@ -1,14 +1,11 @@
 #include "main.h"
 
-int num_commands = 1;
-
 /**
  * split - split a command into an array of commands
  * @cmd: command to split
  *
  * Return: pointer to array of commands
  */
-
 
 command_t *split(char *cmd)
 {
@@ -19,6 +16,7 @@ command_t *split(char *cmd)
 	commands[0].op = NULL;
 	commands[0].argv = malloc(sizeof(char *));
 	token = strtok(cmd, " ");
+	num_commands = 1;
 
 	while (token != NULL)
 	{

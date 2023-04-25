@@ -1,8 +1,12 @@
 #include "main.h"
 
+/**
+ * prompt - prompts user
+ *
+ * Return: void
+ */
 
-
-void prompt (void)
+void prompt(void)
 {
 	char *command;
 	size_t len = 0;

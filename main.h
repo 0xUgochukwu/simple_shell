@@ -55,17 +55,18 @@ typedef struct command
 command_t *parse_command(char *cmd);
 command_t *split(char *cmd);
 void prompt(void);
-void replace_vars(command_t cmd)
+void run_file(char *file_name);
+void replace_vars(command_t cmd);
 void execute_file(char *filename);
-char *replace_aliases(char *cmd);
-char *replace_s_vars(char *cmd);
-int execute_commands(command_t *cmds);
-int builtin_check(char *cmd, char **argv);
+void free_commands(command_t *cmds, size_t n_cmds);
 char **get_paths(void);
 char *get_path(char *cmd);
-int execute_cmd(command_t cmd_s);
+char *replace_s_vars(char *cmd);
+char *replace_aliases(char *cmd);
 int is_num(char *str);
+int throw_error (char *error);
+int execute_cmd(command_t cmd_s);
+int execute_commands(command_t *cmds);
 int operator_check(char *op, int status);
-void run_file(char *file_name);
-void free_commands(command_t *cmds, size_t n_cmds);
+int builtin_check(char *cmd, char **argv);
 #endif

@@ -1,11 +1,9 @@
 #include "main.h"
 
-extern char **environ;
-
 /**
  * bi_exit - ...
  *
- * @argv:
+ * @argv: arguments
  * Return: int
  */
 
@@ -26,13 +24,14 @@ int bi_exit(char **argv)
 /**
  * bi_env - ...
  *
- * @argv: 
+ * @argv: arguments
  * Return: int
  */
 
 int bi_env(char __attribute__((unused)) **argv)
 {
 	char **env = environ;
+
 	while (*env)
 	{
 		fprintf(stdout, "%s\n", *env);
@@ -42,9 +41,9 @@ int bi_env(char __attribute__((unused)) **argv)
 }
 
 /**
- * bi_env - ...
+ * bi_setenv - ...
  *
- * @argv: 
+ * @argv: arguments
  * Return: int
  */
 
@@ -66,7 +65,7 @@ int bi_setenv(char **argv)
 	{
 		envname = strtok(strdup(env[i]), "=");
 		if (strcmp(argv[1], envname) == 0)
-			j = i;	
+			j = i;
 		i++;
 	}
 
@@ -83,9 +82,9 @@ int bi_setenv(char **argv)
 
 
 /**
- * bi_env - ...
+ * bi_unsetenv - ...
  *
- * @argv: 
+ * @argv: arguments
  * Return: int
  */
 
@@ -105,7 +104,7 @@ int bi_unsetenv(char **argv)
 	{
 		envname = strtok(strdup(env[i]), "=");
 		if (strcmp(argv[1], envname) == 0)
-			j = i;	
+			j = i;
 		i++;
 	}
 
@@ -125,76 +124,9 @@ int bi_unsetenv(char **argv)
 
 
 /**
- * bi_env - ...
+ * is_num - checks if value passed is a num
  *
- * @argv: 
- * Return: int
- */
-
-int bi_cd(char __attribute__((unused)) **argv)
-{
-	struct stat st;
-	char *path = argv[1] == NULL ? getenv("HOME") : argv[1];
-
-	if (strcmp(path, ".") == 0)
-		return (0);
-
-	if (strcmp(path, "-") == 0)
-		path = getenv("OLDPWD");
-
-	if (stat(path, &st) == 0 && st.st_mode & S_IXUSR)
-	{
-		setenv("OLDPWD", getenv("PWD"), 1);
-		chdir(path);
-		setenv("PWD", path, 1);
-
-		return (0);
-	}
-
-	perror("cd");
-
-	return (1);
-}
-
-/**
- * bi_alias - ...
- *
- * @argv: 
- * Return: int
- */
-
-int bi_alias(char __attribute__((unused)) **argv)
-{
-	int i = 1, j = 0;
-	char *alias_name, *alias, *token;
-
-	alias_name = malloc(BUFFSIZE);
-	alias = malloc(BUFFSIZE);
-
-	while (argv[i])
-	{
-		printf("%s\n", argv[i]);
-		while (token != NULL)
-		{
-			if (j == 0)
-				alias_name = token;
-			alias = token;
-			token = strtok(strdup(argv[i]), "=");
-			token = strtok(NULL, "=");
-			j++;
-		}
-		printf("%s\n", alias_name);
-		printf("%s\n", alias);
-		i++;
-	}
-	return (0);
-}
-
-
-/**
- * is_num - ...
- *
- * @argv:
+ * @str: exit status oassed by user
  * Return: int
  */
 

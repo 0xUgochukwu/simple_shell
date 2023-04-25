@@ -68,11 +68,11 @@ void free_commands(command_t *cmds, size_t n_cmds)
 			while (cmds[i].argv[j])
 			{
 				free(cmds[i].argv[j]);
-				cmds[i].argv[j] = NULL; 
+				cmds[i].argv[j] = NULL;
 				j++;
 			}
 			free(cmds[i].argv);
-			cmds[i].argv = NULL; 
+			cmds[i].argv = NULL;
 		}
 	}
 
