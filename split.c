@@ -9,7 +9,7 @@
 
 command_t *split(char *cmd)
 {
-	int argc = 0, i = 0, num_commands = get_num_commands();
+	int argc = 0, i, num_commands = 1;
 	char *token;
 	command_t *commands = malloc(sizeof(command_t));
 
@@ -29,7 +29,7 @@ command_t *split(char *cmd)
 				commands[i].cmd = NULL;
 
 			commands = realloc(commands, (++num_commands) * sizeof(command_t));
-			commands[++i].op = (*token == ';') ? NULL : token;
+			commands[i++].op = (*token == ';') ? NULL : token;
 			commands[i].argv = malloc(sizeof(char *));
 			argc = 0;
 		}

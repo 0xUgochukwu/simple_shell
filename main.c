@@ -5,6 +5,7 @@
  *
  * @ac: argument count
  * @av: list of arguments
+ * @envp: environment variables
  *
  * Return: int
  */
@@ -49,7 +50,6 @@ int main(int __attribute__((unused)) ac, char **av, char **envp)
 		else
 			prompt();
 	}
-
 	free(err_msg);
 	return (0);
 }
