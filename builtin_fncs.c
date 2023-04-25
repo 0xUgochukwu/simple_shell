@@ -42,31 +42,128 @@ int bi_env(char __attribute__((unused)) **argv)
 }
 
 /**
- * bi_cd - ...
+ * bi_env - ...
  *
- * @argv:
+ * @argv: 
+ * Return: int
+ */
+
+int bi_setenv(char **argv)
+{
+	char **env = environ;
+	char *newenv, *envname;
+	int i = 0, j = -1;
+
+	if (argv[1] == NULL || argv[2] == NULL)
+	{
+		perror("missing argument");
+		return (1);
+	}
+
+	newenv = malloc(BUFFSIZE);
+	sprintf(newenv, "%s=%s", argv[1], argv[2]);
+	while (env[i])
+	{
+		envname = strtok(strdup(env[i]), "=");
+		if (strcmp(argv[1], envname) == 0)
+			j = i;	
+		i++;
+	}
+
+	if (j >= 0 && j != i)
+		environ[j] = newenv;
+	else
+	{
+		environ[i++] = newenv;
+		environ[i] = NULL;
+	}
+
+	return (0);
+}
+
+
+/**
+ * bi_env - ...
+ *
+ * @argv: 
+ * Return: int
+ */
+
+int bi_unsetenv(char **argv)
+{
+	char **env = environ;
+	char *envname;
+	int i = 0, j = -1;
+
+	if (argv[1] == NULL)
+	{
+		perror("missing argument");
+		return (1);
+	}
+
+	while (env[i])
+	{
+		envname = strtok(strdup(env[i]), "=");
+		if (strcmp(argv[1], envname) == 0)
+			j = i;	
+		i++;
+	}
+
+	if (j < 0)
+		return (0);
+
+	while (j >= 0 && j < (i - 1))
+	{
+		environ[j] = environ[j + 1];
+		j++;
+	}
+
+	environ[j] = NULL;
+
+	return (0);
+}
+
+
+/**
+ * bi_env - ...
+ *
+ * @argv: 
  * Return: int
  */
 
 int bi_cd(char __attribute__((unused)) **argv)
 {
-	char **env = environ;
-	while (*env)
+	struct stat st;
+	char *path = argv[1] == NULL ? getenv("HOME") : argv[1];
+
+	if (strcmp(path, ".") == 0)
+		return (0);
+
+	if (strcmp(path, "-") == 0)
+		path = getenv("OLDPWD");
+
+	if (stat(path, &st) == 0 && st.st_mode & S_IXUSR)
 	{
-		fprintf(stdout, "%s\n", *env);
-		env++;
+		setenv("OLDPWD", getenv("PWD"), 1);
+		chdir(path);
+		setenv("PWD", path, 1);
+
+		return (0);
 	}
-	return (0);
+
+	perror("cd");
+
+	return (1);
 }
 
 /**
- * bi_setenv - ...
+ * bi_alias - ...
  *
- * @argv:
+ * @argv: 
  * Return: int
  */
 
-int bi_setenv(char __attribute__((unused)) **argv)
+int bi_alias(char __attribute__((unused)) **argv)
 {
 	char **env = environ;
 	while (*env)
@@ -77,23 +174,6 @@ int bi_setenv(char __attribute__((unused)) **argv)
 	return (0);
 }
 
-/**
- * bi_unsetenv - ...
- *
- * @argv:
- * Return: int
- */
-
-int bi_unsetenv(char __attribute__((unused)) **argv)
-{
-	char **env = environ;
-	while (*env)
-	{
-		fprintf(stdout, "%s\n", *env);
-		env++;
-	}
-	return (0);
-}
 
 /**
  * is_num - ...

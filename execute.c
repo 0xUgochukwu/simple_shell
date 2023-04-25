@@ -182,13 +182,17 @@ char *get_path(char *cmd)
 int builtin_check(char *cmd, char **args)
 {
 	cmds_t bi_cmds[] = {
+		{"unsetenv", bi_unsetenv},
+		{"setenv", bi_setenv},
+		{"alias", bi_alias},
 		{"exit", bi_exit},
 		{"env", bi_env},
+		{"cd", bi_cd},
 		{NULL, NULL}
 	};
 	int i = 0;
 
-	while (i < 2)
+	while (i < 6)
 	{
 		if (strcmp(cmd, bi_cmds[i].cmd) == 0)
 			return (bi_cmds[i].fnc(args));

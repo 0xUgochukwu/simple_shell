@@ -23,11 +23,10 @@ command_t *split(char *cmd)
 
 	while (token != NULL)
 	{
-		if (*token == ';' || *token == '&' || *token == '|')
-		{
 		if (*token == '#')
 			break;
-		if (*token == ';' || *token == '&' || *token == '|') {
+		if (*token == ';' || *token == '&' || *token == '|')
+		{
 			/* End the current command and start a new one */
 
 			if (argc > 0)
@@ -56,9 +55,18 @@ command_t *split(char *cmd)
 
 		token = strtok(NULL, " ");
 	}
+
 	/* Set the last command's cmd field */
 	if (argc > 0)
+	{
 		commands[num_commands - 1].cmd = commands[num_commands - 1].argv[0];
+		if (argc == 1 && strcmp(commands[num_commands - 1].argv[0], "ls") == 0)
+		{
+			commands[num_commands - 1].argv = realloc(commands[num_commands - 1].argv, (argc + 2) * sizeof(char *));
+			commands[num_commands - 1].argv[argc++] = "--color=auto";
+			commands[num_commands - 1].argv[argc] = NULL;
+		}
+	}
 
 	else
 		commands[num_commands - 1].cmd = NULL;

@@ -26,6 +26,10 @@ typedef struct {
 
 int bi_exit(char **argv);
 int bi_env(char **argv);
+int bi_cd(char **argv);
+int bi_alias(char **argv);
+int bi_setenv(char **argv);
+int bi_unsetenv(char **argv);
 
 typedef struct {
 	char *cmd;
