@@ -1,5 +1,7 @@
 #include "main.h"
 
+#include "main.h"
+
 /**
  * main - entry point for the simple shell program
  *
@@ -7,15 +9,15 @@
  */
 int main(void)
 {
-	       char *line = NULL, **args = NULL;
+        char *line = NULL, **args = NULL;
         size_t line_size = 0;
         ssize_t read = 0;
-        int status = 0, interactive = isatty(STDIN_FILENO);;
+        int status = 0, interactive = isatty(STDIN_FILENO);
 
         while (1)
         {
                 /* Display prompt and get command line */
-		if (interactive)
+                if (interactive)
                         _puts("$ ");
                 read = getline(&line, &line_size, stdin);
                 if (read == -1)
@@ -24,6 +26,10 @@ int main(void)
                 /* Remove newline character */
                 if (line[read - 1] == '\n')
                         line[read - 1] = '\0';
+
+                /* Check for empty command */
+                if (line[0] == '\0')
+                        continue;
 
                 /* Split command line into arguments */
                 args = split_line(line);
@@ -43,9 +49,8 @@ int main(void)
         free(args);
 
         /* Exit the shell */
-
-	if (interactive)
-        	_puts("\n");
+        if (interactive)
+                _puts("\n");
         return (status);
 }
 
@@ -57,42 +62,42 @@ int main(void)
  */
 int execute(char **args)
 {
-	pid_t pid = 0;
-	int status = 0;
+        pid_t pid = 0;
+        int status = 0;
 
-	/* Fork a new process */
-	pid = fork();
+        /* Fork a new process */
+        pid = fork();
 
-	/* Check for errors */
-	if (pid == -1)
-	{
-		perror("fork");
-		return (0);
-	}
-	else if (pid == 0)
-	{
-		/* Child process */
+        /* Check for errors */
+        if (pid == -1)
+        {
+                perror("fork");
+                return (0);
+        }
+        else if (pid == 0)
+        {
+                /* Child process */
 
-		/* Attempt to execute command */
-		if (execve(args[0], args, environ) == -1)
-		{
-			/* Command not found */
-			perror("execve");
-			_exit(127);
-		}
-	}
-	else
-	{
-		/* Parent process */
+                /* Attempt to execute command */
+                if (execve(args[0], args, environ) == -1)
+                {
+                        /* Command not found */
+                        perror("execve");
+                        _exit(127);
+                }
+        }
+        else
+        {
+                /* Parent process */
 
-		/* Wait for child to complete */
-		do
-		{
-			waitpid(pid, &status, WUNTRACED);
-		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
-	}
+                /* Wait for child to complete */
+                do
+                {
+                        waitpid(pid, &status, WUNTRACED);
+                } while (!WIFEXITED(status) && !WIFSIGNALED(status));
+        }
 
-	return (1);
+        return (1);
 }
 
 /**
@@ -103,31 +108,31 @@ int execute(char **args)
  */
 char **split_line(char *line)
 {
-	char **args = NULL;
-	char *token = NULL;
-	size_t i = 0;
+        char **args = NULL;
+        char *token = NULL;
+        size_t i = 0;
 
-	/* Allocate memory for arguments */
-	args = malloc(ARG_MAX * sizeof(char *));
-	if (args == NULL)
-	{
-		perror("malloc");
-		exit(EXIT_FAILURE);
-	}
+        /* Allocate memory for arguments */
+        args = malloc(ARG_MAX * sizeof(char *));
+        if (args == NULL)
+        {
+                perror("malloc");
+                exit(EXIT_FAILURE);
+        }
 
-	/* Split line into tokens */
-	token = strtok(line, " ");
-	while (token != NULL)
-	{
-		args[i] = token;
-		i++;
-		token = strtok(NULL, " ");
-	}
+        /* Split line into tokens */
+        token = strtok(line, " ");
+        while (token != NULL)
+        {
+                args[i] = token;
+                i++;
+                token = strtok(NULL, " ");
+        }
 
-	/* Set last argument to NULL */
-	args[i] = NULL;
+        /* Set last argument to NULL */
+        args[i] = NULL;
 
-	return (args);
+        return (args);
 }
 
 
