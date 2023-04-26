@@ -1,147 +1,117 @@
-#include "main.h"
-
-#include "main.h"
+#include "root.h"
 
 /**
- * main - entry point for the simple shell program
- *
- * Return: Always 0.
+ * sig_handler - Prints a new prompt upon a signal.
+ * @sig: The signal.
  */
-int main(void)
+void sig_handler(int sig)
 {
-        char *line = NULL, **args = NULL;
-        size_t line_size = 0;
-        ssize_t read = 0;
-        int status = 0, interactive = isatty(STDIN_FILENO);
+	char *new_prompt = "\n$ ";
 
-        while (1)
-        {
-                /* Display prompt and get command line */
-                if (interactive)
-                        _puts("$ ");
-                read = getline(&line, &line_size, stdin);
-                if (read == -1)
-                        break;
-
-                /* Remove newline character */
-                if (line[read - 1] == '\n')
-                        line[read - 1] = '\0';
-
-                /* Check for empty command */
-                if (line[0] == '\0')
-                        continue;
-
-                /* Split command line into arguments */
-                args = split_line(line);
-
-                /* Execute command */
-                status = execute(args);
-
-                /* Free memory and reset variables */
-                free(line);
-                free(args);
-                line = NULL;
-                args = NULL;
-        }
-
-        /* Free any remaining memory */
-        free(line);
-        free(args);
-
-        /* Exit the shell */
-        if (interactive)
-                _puts("\n");
-        return (status);
+	(void)sig;
+	signal(SIGINT, sig_handler);
+	write(STDIN_FILENO, new_prompt, 3);
 }
 
 /**
- * execute - execute a command with arguments
- * @args: list of arguments
+ * execute - Executes a command in a child process.
+ * @args: An array of arguments.
+ * @front: A double pointer to the beginning of args.
  *
- * Return: 1 on success, 0 on failure.
+ * Return: If an error occurs - a corresponding error code.
+ *         O/w - The exit value of the last executed command.
  */
-int execute(char **args)
-{
-        pid_t pid = 0;
-        int status = 0;
+int execute(char **args, char **front)
+{	pid_t child_pid;
+	int status, flag = 0, ret = 0;
+	char *command = args[0];
 
-        /* Fork a new process */
-        pid = fork();
-
-        /* Check for errors */
-        if (pid == -1)
-        {
-                perror("fork");
-                return (0);
-        }
-        else if (pid == 0)
-        {
-                /* Child process */
-
-                /* Attempt to execute command */
-                if (execve(args[0], args, environ) == -1)
-                {
-                        /* Command not found */
-                        perror("execve");
-                        _exit(127);
-                }
-        }
-        else
-        {
-                /* Parent process */
-
-                /* Wait for child to complete */
-                do
-                {
-                        waitpid(pid, &status, WUNTRACED);
-                } while (!WIFEXITED(status) && !WIFSIGNALED(status));
-        }
-
-        return (1);
+	if (command[0] != '/' && command[0] != '.')
+	{	flag = 1;
+		command = get_location(command);
+	}
+	if (!command || (access(command, F_OK) == -1))
+	{
+		if (errno == EACCES)
+			ret = (create_error(args, 126));
+		else
+			ret = (create_error(args, 127));
+	}
+	else
+	{	child_pid = fork();
+		if (child_pid == -1)
+		{
+			if (flag)
+				free(command);
+			perror("Error child:");
+			return (1);
+		}
+		if (child_pid == 0)
+		{	execve(command, args, environ);
+			if (errno == EACCES)
+				ret = (create_error(args, 126));
+			free_env();
+			free_args(args, front);
+			free_alias_list(aliases);
+			_exit(ret);
+		}
+		else
+		{	wait(&status);
+			ret = WEXITSTATUS(status);
+		}
+	}
+	if (flag)
+		free(command);
+	return (ret);
 }
 
 /**
- * split_line - split a command line into arguments
- * @line: command line
+ * main - Runs a simple UNIX command interpreter.
+ * @argc: The number of arguments supplied to the program.
+ * @argv: An array of pointers to the arguments.
  *
- * Return: array of arguments
+ * Return: The return value of the last executed command.
  */
-char **split_line(char *line)
-{
-        char **args = NULL;
-        char *token = NULL;
-        size_t i = 0;
+int main(int argc, char *argv[])
+{	int ret = 0, retn;
+	int *exe_ret = &retn;
+	char *prompt = "$ ", *new_line = "\n";
 
-        /* Allocate memory for arguments */
-        args = malloc(ARG_MAX * sizeof(char *));
-        if (args == NULL)
-        {
-                perror("malloc");
-                exit(EXIT_FAILURE);
-        }
-
-        /* Split line into tokens */
-        token = strtok(line, " ");
-        while (token != NULL)
-        {
-                args[i] = token;
-                i++;
-                token = strtok(NULL, " ");
-        }
-
-        /* Set last argument to NULL */
-        args[i] = NULL;
-
-        return (args);
-}
-
-
-int _puts(const char *str) {
-    int num_chars = 0;
-    while (*str != '\0')
-    {
-        write(STDOUT_FILENO, str++, 1);
-        num_chars++;
-    }
-    return num_chars;
+	name = argv[0];
+	hist = 1;
+	aliases = NULL;
+	signal(SIGINT, sig_handler);
+	*exe_ret = 0;
+	environ = _copyenv();
+	if (!environ)
+		exit(-100);
+	if (argc != 1)
+	{	ret = file_cmds(argv[1], exe_ret);
+		free_env();
+		free_alias_list(aliases);
+		return (*exe_ret);
+	}
+	if (!isatty(STDIN_FILENO))
+	{
+		while (ret != END_OF_FILE && ret != EXIT)
+			ret = handle_args(exe_ret);
+		free_env();
+		free_alias_list(aliases);
+		return (*exe_ret);
+	}
+	while (1)
+	{	write(STDOUT_FILENO, prompt, 2);
+		ret = handle_args(exe_ret);
+		if (ret == END_OF_FILE || ret == EXIT)
+		{
+			if (ret == END_OF_FILE)
+				write(STDOUT_FILENO, new_line, 1);
+			free_env();
+			free_alias_list(aliases);
+			exit(*exe_ret);
+		}
+	}
+	free_env();
+	free_alias_list(aliases);
+	return (*exe_ret);
 }
