@@ -1,49 +1,51 @@
-#include "shell.h"
-/**
- * main - Entry point for the simple shell project created
- * for ALX sprint one final Project.
- * Return: 0 on success
- */
-int main(void)
-{
-	ssize_t bytes_rd = 0; /** Bytes read from a getline*/
-	size_t bf_size = 0; /**Buffer size*/
-	char *entry = NULL, *arguments[20]; /**String of args that enters the usr*/
-	int counter = 1, vf_stat = 0, exist_stat = 0, exit_stat = 0, blt_stat = 0;
+#include "main.h"
 
-	_mprint("$ ", 2);/**prompt mini-shell*/
-	bytes_rd = getline(&entry, &bf_size, stdin); /**sizeof entry, o -1 (EOF))*/
-	while (bytes_rd != -1)
+/**
+ * main - simple shell
+ *
+ * @ac: argument count
+ * @av: list of arguments
+ * @envp: environment variables
+ *
+ * Return: int
+ */
+
+int main(int __attribute__((unused)) ac, char **av, char **envp)
+{
+	char *err_msg = malloc(1024);
+	int err_len;
+	char *command;
+	size_t len = 0;
+	ssize_t read_bytes;
+	command_t *cmds;
+
+	signal(SIGINT, sig_handler);
+	set_status(0);
+	set_num_commands(1);
+	set_environ(envp);
+
+	err_len = sprintf(err_msg, "Usage: %s or %s [filename]\n", av[0], av[0]);
+	if (ac > 2)
 	{
-		if (*entry != '\n')
-		{
-			getcmd_inputs(entry, arguments);
-			if (arguments[0] != NULL)
-			{
-				exist_stat = check_file(arguments[0]);/*checks if the path entered exists*/
-				if (exist_stat != 0)/**Did not find the file*/
-				{
-					vf_stat = get_path(arguments);
-					if (vf_stat == 0)
-						exit_stat = execute(arguments), free(entry), free(*arguments);
-					else
-					{
-					blt_stat = getbuiltins(arguments, exit_stat);
-					if (blt_stat != 0)
-						exit_stat = p_error(arguments, counter), free(entry);
-					}
-				}
-				else /**Found the file*/
-					exit_stat = execute(arguments), free(entry);
-			}
-			else
-				free(entry);
-		}
-		else if (*entry == '\n')
-			free(entry);
-		entry = NULL, counter++;
-		_mprint("$ ", 2), bytes_rd = getline(&entry, &bf_size, stdin);
+		write(STDOUT_FILENO, err_msg, err_len);
+		return (0);
 	}
-	free_mem(entry);
-	return (exit_stat);
+	else
+	{
+		if (!isatty(STDIN_FILENO))
+		{
+			fflush(stdout);
+			read_bytes = getline(&command, &len, stdin);
+			if (read_bytes == -1)
+				exit(0);
+
+			command[strcspn(command, "\n")] = '\0';
+			cmds = parse_command(command);
+			execute_commands(cmds);
+		}
+		else
+			prompt();
+	}
+	free(err_msg);
+	return (0);
 }
