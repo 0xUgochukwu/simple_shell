@@ -10,17 +10,17 @@
 int bi_cd(char __attribute__((unused)) **argv)
 {
 	struct stat st;
-	char *path = argv[1] == NULL ? getenv("HOME") : argv[1];
+	char *path = argv[1] == NULL ? _getenv("HOME") : argv[1];
 
-	if (strcmp(path, ".") == 0)
+	if (_strcmp(path, ".") == 0)
 		return (0);
 
-	if (strcmp(path, "-") == 0)
-		path = getenv("OLDPWD");
+	if (_strcmp(path, "-") == 0)
+		path = _getenv("OLDPWD");
 
 	if (stat(path, &st) == 0 && st.st_mode & S_IXUSR)
 	{
-		setenv("OLDPWD", getenv("PWD"), 1);
+		setenv("OLDPWD", _getenv("PWD"), 1);
 		chdir(path);
 		setenv("PWD", path, 1);
 

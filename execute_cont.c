@@ -15,18 +15,18 @@ void replace_vars(command_t cmd)
 
 	while (args[i])
 	{
-		var = malloc(strlen(args[i]) * sizeof(char));
+		var = malloc(_strlen(args[i]) * sizeof(char));
 		if (args[i][j] == '$')
 		{
 			j++;
-			while (args[i][j] != '\0' && (isalnum(args[i][j]) || args[i][j] == '_'))
+			while (args[i][j] != '\0' && (_isalnum(args[i][j]) || args[i][j] == '_'))
 			{
 				var[j - 1] = args[i][j];
 				j++;
 			}
 
 			var[j] = '\0';
-			strcpy(cmd.argv[i], getenv(var));
+			_strcpy(cmd.argv[i], getenv(var));
 		}
 		i++;
 		j = 0;

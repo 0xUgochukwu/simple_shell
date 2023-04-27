@@ -77,4 +77,17 @@ int operator_check(char *op, int status);
 int builtin_check(char *cmd, char **argv);
 void set_status(int status);
 int get_status(void);
+
+/* helper functions */
+char *_getenv(char *name);
+int _atoi(char *s);
+int _isdigit(int c);
+void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
+int _strcmp(char *s1, char *s2);
+int _isalnum(int c);
+char *_strcpy(char *dest, const char *src);
+char *_strdup(const char *str);
+int _strlen(const char *s);
+size_t _strcspn(const char *s, const char *reject);
+char *str_concat(const char *s1, const char *s2, const char delimiter);
 #endif

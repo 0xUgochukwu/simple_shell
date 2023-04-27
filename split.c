@@ -27,15 +27,16 @@ command_t *split(char *cmd)
 				cmds[n - 1].cmd = cmds[n - 1].argv[0];
 			else
 				cmds[n - 1].cmd = NULL;
-			cmds = realloc(cmds, (++n) * sizeof(command_t));
+			cmds = _realloc(cmds, sizeof(cmds), (++n) * sizeof(command_t));
 			cmds[n - 1].op = (*token == ';') ? NULL : token;
 			cmds[n - 1].argv = malloc(sizeof(char *));
 			argc = 0;
 		}
 		else
 		{
-			cmds[n - 1].argv = realloc(cmds[n - 1].argv, (argc + 2) * sizeof(char *));
-			cmds[n - 1].argv[argc++] = strdup(token);
+			cmds[n - 1].argv = _realloc(cmds[n - 1].argv, sizeof(cmds[n - 1]),
+					(argc + 2) * sizeof(char *));
+			cmds[n - 1].argv[argc++] = _strdup(token);
 			cmds[n - 1].argv[argc] = NULL;
 		}
 

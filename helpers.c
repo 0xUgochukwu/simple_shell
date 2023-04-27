@@ -67,3 +67,42 @@ char *_strcpy(char *dest, const char *src)
 	dest[i] = '\0';
 	return (dest);
 }
+
+/**
+ * _isalnum - checks if a character is alphanumeric
+ * @c: the character to check
+ *
+ * Return: 1 if c is alphanumeric, 0 otherwise
+ */
+int _isalnum(int c)
+{
+	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') ||
+			(c >= '0' && c <= '9'))
+	{
+		return (1);
+	}
+	return (0);
+}
+
+/**
+ * _strcmp - compares two strings
+ * @s1: the first string to be compared
+ * @s2: the second string to be compared
+ *
+ * Return: an integer greater than, equal to, or less than 0, according to
+ * whether s1 is greater than, equal to, or less than s2, respectively
+ */
+int _strcmp(char *s1, char *s2)
+{
+	int i;
+
+	for (i = 0; s1[i] != '\0' && s2[i] != '\0'; i++)
+	{
+		if (s1[i] != s2[i])
+		{
+			return (s1[i] - s2[i]);
+		}
+	}
+
+	return (s1[i] - s2[i]);
+}

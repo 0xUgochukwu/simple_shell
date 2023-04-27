@@ -34,7 +34,6 @@ int bi_env(char __attribute__((unused)) **argv)
 
 	while (*env)
 	{
-		fprintf(stdout, "%s\n", *env);
 		env++;
 	}
 	return (0);
@@ -63,8 +62,8 @@ int bi_setenv(char **argv)
 	sprintf(newenv, "%s=%s", argv[1], argv[2]);
 	while (env[i])
 	{
-		envname = strtok(strdup(env[i]), "=");
-		if (strcmp(argv[1], envname) == 0)
+		envname = strtok(_strdup(env[i]), "=");
+		if (_strcmp(argv[1], envname) == 0)
 			j = i;
 		i++;
 	}
@@ -103,8 +102,8 @@ int bi_unsetenv(char **argv)
 
 	while (env[i])
 	{
-		envname = strtok(strdup(env[i]), "=");
-		if (strcmp(argv[1], envname) == 0)
+		envname = strtok(_strdup(env[i]), "=");
+		if (_strcmp(argv[1], envname) == 0)
 			j = i;
 		i++;
 	}
@@ -139,10 +138,10 @@ int is_num(char *str)
 		return (0);
 	while (*num)
 	{
-		if (isdigit(*num) == 0)
+		if (_isdigit(*num) == 0)
 			return (-1);
 		num++;
 	}
 
-	return (atoi(str));
+	return (_atoi(str));
 }

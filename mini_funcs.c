@@ -39,7 +39,7 @@ char *replace_aliases(char *cmd)
 
 char *replace_s_vars(char *cmd)
 {
-	char *new_cmd = malloc(strlen(cmd) * sizeof(char) + 1);
+	char *new_cmd = malloc(_strlen(cmd) * sizeof(char) + 1);
 	char *p = new_cmd;
 	char *s = cmd;
 
@@ -49,14 +49,14 @@ char *replace_s_vars(char *cmd)
 		{
 			/* Replace $? with main_status */
 			sprintf(p, "%d", get_status());
-			p += strlen(p);
+			p += _strlen(p);
 			s += 2;
 		}
 		else if (s[0] == '$' && s[1] == '$')
 		{
 			/* Replace $$ with the process ID */
 			sprintf(p, "%d", getpid());
-			p += strlen(p);
+			p += _strlen(p);
 			s += 2;
 		}
 		else
