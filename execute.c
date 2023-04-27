@@ -136,95 +136,9 @@ char *get_path(char *cmd)
 
 		token = strtok(NULL, ":");
 	}
-	
 	return (NULL);
 }
 
-/*
-   char *get_path(char *cmd)
-   {
-   char *path = getenv("PATH");
-   char *token = strtok(strdup(path), ":");
-   struct stat st;
-   char *full_path = NULL;
-
-
-   if (stat(cmd, &st) == 0 && st.st_mode & S_IXUSR)
-   return (cmd);
-
-   while (token != NULL)
-   {
-   full_path = malloc(strlen(token) + strlen(cmd) + 2);
-   sprintf(full_path, "%s/%s", token, cmd);
-
-   if (stat(full_path, &st) == 0 && st.st_mode & S_IXUSR)
-   return (full_path);
-
-   if (full_path != NULL)
-   {
-   free(full_path);
-   full_path = NULL;
-   }
-
-   token = strtok(NULL, ":");
-   }
-
-   return (NULL);
-   }
-
-   char *get_path(char *cmd)
-   {
-   char *path = _getenv("PATH");
-   char *token = strtok(_strdup(path), ":");
-   struct stat st;
-   char *full_path = NULL;
-   int path_len = _strlen(token) + _strlen(cmd) + 2;
-   int i = 0, j = 0;
-
-   if (stat(cmd, &st) == 0 && st.st_mode & S_IXUSR)
-   return (cmd);
-
-   while (token != NULL)
-   {
-   full_path = malloc(path_len);
-   if (full_path == NULL)
-   return NULL;
-
-   i = 0;
-   while (*token != '\0')
-   {
-   full_path[i] = *token;
-   token++;
-   i++;
-   }
-
-   full_path[i] = '/';
-   i++;
-
-   j = 0;
-   while (cmd[j] != '\0')
-   {
-   full_path[i] = cmd[j];
-   i++;
-   j++;
-   }
-   full_path[i] = '\0';
-
-   if (stat(full_path, &st) == 0 && st.st_mode & S_IXUSR)
-return (full_path);
-
-if (full_path != NULL)
-{
-	free(full_path);
-	full_path = NULL;
-}
-
-token = strtok(NULL, ":");
-}
-
-return (NULL);
-}
-*/
 
 /**
  * builtin_check - check if command is a builtin

@@ -59,7 +59,7 @@ int bi_setenv(char **argv)
 	}
 
 	newenv = malloc(BUFFSIZE);
-	sprintf(newenv, "%s=%s", argv[1], argv[2]);
+	newenv = str_concat(argv[1], argv[2], '=');
 	while (env[i])
 	{
 		envname = strtok(_strdup(env[i]), "=");
