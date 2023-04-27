@@ -18,6 +18,7 @@ static int __attribute__((unused)) g_num_commands;
 static int __attribute__((unused)) g_main_status;
 static char __attribute__((unused))**g_environ;
 
+void sig_handler(int sig);
 void set_status(int status);
 int get_status(void);
 void set_num_commands(int num);

@@ -19,6 +19,7 @@ int main(int __attribute__((unused)) ac, char **av, char **envp)
 	ssize_t read_bytes;
 	command_t *cmds;
 
+	signal(SIGINT, sig_handler);
 	set_status(0);
 	set_num_commands(1);
 	set_environ(envp);
