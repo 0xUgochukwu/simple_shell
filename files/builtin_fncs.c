@@ -1,7 +1,11 @@
 #include "main.h"
 
 /**
+<<<<<<< HEAD
  * bi_exit - exit the shell 
+=======
+ * bi_exit - exits the shell
+>>>>>>> 7828a6ef9968b7437d7de953633dead1c3cebc8f
  *
  * @argv: arguments
  * Return: int
