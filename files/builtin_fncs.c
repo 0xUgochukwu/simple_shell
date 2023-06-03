@@ -21,7 +21,7 @@ int bi_exit(char **argv)
 
 
 /**
- * bi_env - ...
+ * bi_env - print environment variables 
  *
  * @argv: arguments
  * Return: int
