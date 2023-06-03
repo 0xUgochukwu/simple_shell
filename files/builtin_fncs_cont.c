@@ -1,7 +1,7 @@
 #include "main.h"
 
 /**
- * bi_cd - ...
+ * bi_cd - change directory 
  *
  * @argv: arguments
  * Return: int
