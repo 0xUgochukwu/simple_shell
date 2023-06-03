@@ -32,7 +32,7 @@ char *replace_aliases(char *cmd)
 
 /**
  * replace_s_vars - replace special variables in a string
- * @cmd: the string to replace variables in
+ * @cmd: command string 
  *
  * Return: a string with variables replaced
  */
