@@ -39,7 +39,7 @@ int bi_env(char __attribute__((unused)) **argv)
 }
 
 /**
- * bi_setenv - ...
+ * bi_setenv - set environment variable 
  *
  * @argv: arguments
  * Return: int
